@@ -213,8 +213,10 @@ function $lybF10(text, fn = () => {}) {
 }
 
 // 日期格式化
-function $lybF11(date, fmt) {
-  let ret;
+function $lybF11(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
+  date = new Date(date);
+  let ret,
+    week = ['日', '一', '二', '三', '四', '五', '六'];
   const opt = {
     'Y+': date.getFullYear().toString(),
     'M+': (date.getMonth() + 1).toString(),
@@ -222,6 +224,8 @@ function $lybF11(date, fmt) {
     'h+': date.getHours().toString(),
     'm+': date.getMinutes().toString(),
     's+': date.getSeconds().toString(),
+    w: week[date.getDay()],
+    n: new Date(date).valueOf(),
   };
   for (let k in opt) {
     ret = new RegExp(`(${k})`).exec(fmt);
@@ -418,8 +422,8 @@ function $lybF12(keyword) {
           lao: '\u635e\u52b3\u7262\u8001\u4f6c\u59e5\u916a\u70d9\u6d9d\u5520\u5d02\u6833\u94d1\u94f9\u75e8\u91aa',
           le: '\u52d2\u4e50\u808b\u4ec2\u53fb\u561e\u6cd0\u9cd3',
           lei: '\u96f7\u956d\u857e\u78ca\u7d2f\u5121\u5792\u64c2\u7c7b\u6cea\u7fb8\u8bd4\u837d\u54a7\u6f2f\u5ad8\u7f27\u6a91\u8012\u9179',
-          ling: '\u68f1\u51b7\u62ce\u73b2\u83f1\u96f6\u9f84\u94c3\u4f36\u7f9a\u51cc\u7075\u9675\u5cad\u9886\u53e6\u4ee4\u9143\u5844\u82d3\u5464\u56f9\u6ce0\u7eeb\u67c3\u68c2\u74f4\u8046\u86c9\u7fce\u9cae',
-          leng: '\u695e\u6123',
+          ling: '\u68f1\u62ce\u73b2\u83f1\u96f6\u9f84\u94c3\u4f36\u7f9a\u51cc\u7075\u9675\u5cad\u9886\u53e6\u4ee4\u9143\u5844\u82d3\u5464\u56f9\u6ce0\u7eeb\u67c3\u68c2\u74f4\u8046\u86c9\u7fce\u9cae',
+          leng: '\u51b7\u695e\u6123',
           li: '\u5398\u68a8\u7281\u9ece\u7bf1\u72f8\u79bb\u6f13\u7406\u674e\u91cc\u9ca4\u793c\u8389\u8354\u540f\u6817\u4e3d\u5389\u52b1\u783e\u5386\u5229\u5088\u4f8b\u4fd0\u75e2\u7acb\u7c92\u6ca5\u96b6\u529b\u7483\u54e9\u4fea\u4fda\u90e6\u575c\u82c8\u8385\u84e0\u85dc\u6369\u5456\u5533\u55b1\u7301\u6ea7\u6fa7\u9026\u5a0c\u5ae0\u9a8a\u7f21\u73de\u67a5\u680e\u8f79\u623e\u783a\u8a48\u7f79\u9502\u9e42\u75a0\u75ac\u86ce\u870a\u8821\u7b20\u7be5\u7c9d\u91b4\u8dde\u96f3\u9ca1\u9ce2\u9ee7',
           lian: '\u4fe9\u8054\u83b2\u8fde\u9570\u5ec9\u601c\u6d9f\u5e18\u655b\u8138\u94fe\u604b\u70bc\u7ec3\u631b\u8539\u5941\u6f4b\u6fc2\u5a08\u740f\u695d\u6b93\u81c1\u81a6\u88e2\u880a\u9ca2',
           liang:
@@ -1148,22 +1152,30 @@ function $lybF12(keyword) {
   })();
   let a = pinyin.getFullChars(keyword);
   let b = pinyin.getCamelChars(keyword);
-  return [a, b];
+  return [a.toLowerCase(), a, b.toLowerCase(), b];
 }
 
-//数组对象搜索
+//正则搜索
 function $lybF13(data, value, keys) {
-  const arr = [];
+  let arr = [];
+  function fn(item, key) {
+    let reg = new RegExp(item, 'i');
+    arr.push(
+      ...data.filter(item => {
+        return reg.test($lybF12(item[key].toString())) || reg.test(item[key]);
+      }),
+    );
+  }
   keys.forEach(key => {
-    value.forEach(item => {
-      arr.push(
-        ...data.filter(_item => {
-          return item == $lybF12(_item[key].toString()) || item == _item[key];
-        }),
-      );
-    });
+    if ($lybP2(value) == 'array') {
+      value.forEach(item => {
+        fn(item, key);
+      });
+    } else {
+      fn(value, key);
+    }
   });
-  return $lybP6(arr);
+  return arr;
 }
 
 //判断是否为指定类型的文件链接
@@ -1306,151 +1318,6 @@ function $lybS1(el) {
       });
     });
   }
-}
-
-function translate1(el) {
-  el.style.transform = `translateY(-500px)`;
-}
-function translate2(el) {
-  el.style.transform = 'translateY(500px)';
-}
-function translate3(el) {
-  el.style.transform = 'translateX(-500px)';
-}
-function translate4(el) {
-  el.style.transform = 'translateX(500px)';
-}
-function rotate1(el) {
-  el.style.transform = 'rotateX(180deg)';
-}
-function rotate2(el) {
-  el.style.transform = 'rotateY(-180deg)';
-}
-function scale1(el) {
-  el.style.transform = 'scale(0.1)';
-}
-function scale2(el) {
-  el.style.transform = 'scale(2)';
-}
-function scale3(el) {
-  el.style.transform = 'scale3d(2,1,1)';
-}
-function mixedT1(el) {
-  el.style.transform = 'translateX(-500px) translateY(500px)';
-}
-function mixedT2(el) {
-  el.style.transform = 'translateX(-500px) translateY(-500px)';
-}
-function mixedT3(el) {
-  el.style.transform = 'translateX(500px) translateY(-500px)';
-}
-function mixedT4(el) {
-  el.style.transform = 'translateX(500px) translateY(500px)';
-}
-function mixedTR1(el) {
-  el.style.transform = 'translateY(-500px) rotateX(180deg)';
-}
-function mixedTR2(el) {
-  el.style.transform = 'translateY(500px) rotateX(-180deg)';
-}
-function mixedTR3(el) {
-  el.style.transform = 'translateX(-500px) rotateY(180deg)';
-}
-function mixedTR4(el) {
-  el.style.transform = 'translateX(500px) rotateY(-180deg)';
-}
-function mixedTR5(el) {
-  el.style.transform = 'translateX(-500px) rotateZ(-180deg)';
-}
-function mixedTR6(el) {
-  el.style.transform = 'translateX(500px) rotateZ(180deg)';
-}
-function mixedTS1(el) {
-  el.style.transform = 'translateX(-500px) scale(0.1)';
-}
-function mixedTS2(el) {
-  el.style.transform = 'translateX(500px) scale(0.1)';
-}
-function mixedTS3(el) {
-  el.style.transform = 'translateX(500px) scale(2)';
-}
-function mixedTS4(el) {
-  el.style.transform = 'translateX(-500px) scale(2)';
-}
-function mixedTS5(el) {
-  el.style.transform = 'translateY(-500px) scale(2)';
-}
-function mixedTS6(el) {
-  el.style.transform = 'translateY(500px) scale(0.1)';
-}
-function mixedTS7(el) {
-  el.style.transform = 'translateY(500px) scale(2)';
-}
-function mixedRS1(el) {
-  el.style.transform = 'rotateZ(180deg) scale(0.1)';
-}
-function mixedRS2(el) {
-  el.style.transform = 'rotateZ(-180deg) scale(2)';
-}
-function opacity(el) {
-  el.style.opacity = 0;
-}
-
-function Animats(el, obj = {}) {
-  let { x = 0, y = 0, rx = 0, ry = 0, rz = 0, sx = 1, sy = 1 } = obj;
-  el.style.transform = `translateX(${x}px) translateY(${y}px) rotateX(${rx}deg)  rotateY(${ry}deg)  rotateZ(${rz}deg) scaleX(${sx}) scaleY(${sy})`;
-}
-
-//页面滚动元素动画入场（切勿用于上拉加载，适用于上拉加载的正在开发中）
-function $lybS2(obj, animats) {
-  let {
-    el,
-    count,
-    animat = opacity,
-    duration = 500,
-    delay = 100,
-    Animats,
-  } = obj;
-  let htmlHeight, scrollHeight, time;
-  let html = document.documentElement;
-  let newArr = [];
-  el.forEach(item => {
-    if (item.length != undefined) {
-      item = Array.from(item);
-      newArr.push(item);
-    } else if (item.length == undefined) {
-      newArr.push(item);
-    }
-  });
-  el = newArr.flat(Infinity);
-  window.onscroll = () => {
-    htmlHeight = html.clientHeight;
-    scrollHeight = html.scrollTop;
-    time = 0;
-    el.forEach(item => {
-      if (item.offsetTop <= scrollHeight + htmlHeight) {
-        item.style.transitionDelay = `${time}s`;
-        time += delay / 1000;
-        item.style.transitionDuration = `${duration / 1000}s`;
-        item.style.transform = '';
-        item.style.opacity = 1;
-        if (parseFloat(time.toFixed(1)) > (count * delay - delay) / 1000) {
-          time = 0;
-        }
-      } else if (item.offsetTop - htmlHeight >= scrollHeight) {
-        if (animat != opacity) {
-          animat(item);
-        } else if (Animats) {
-          Animats(item, animats);
-        } else {
-          animat(item);
-        }
-        item.style.transitionDelay = '0s';
-        item.style.transitionDuration = '0s';
-        item.style.opacity = 0;
-      }
-    });
-  };
 }
 
 //返回顶部
