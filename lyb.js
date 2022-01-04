@@ -109,12 +109,13 @@ function $lybF2(el) {
 
 //防抖（延迟执行）
 function $lybF3(fn, delay) {
-  let timer = null;
-  return () => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(fn, delay);
+  return function (args) {
+    let that = this;
+    let _args = args;
+    clearTimeout(fn.id);
+    fn.id = setTimeout(function () {
+      fn.call(that, _args);
+    }, delay);
   };
 }
 
@@ -150,14 +151,20 @@ function $lybF5(fn, delay) {
 
 //节流（立即执行）
 function $lybF6(fn, delay) {
-  let previous = 0;
-  return function () {
-    let now = Date.now();
-    let context = this;
-    let args = arguments;
-    if (now - previous > delay) {
-      fn.apply(context, args);
-      previous = now;
+  let last, deferTimer;
+  return function (args) {
+    let that = this;
+    let _args = args;
+    let now = +new Date();
+    if (last && now < last + delay) {
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(that, _args);
+      }, delay);
+    } else {
+      last = now;
+      fn.apply(that, _args);
     }
   };
 }
@@ -1171,11 +1178,15 @@ function $lybF13(data, value, keys) {
       value.forEach(item => {
         fn(item, key);
       });
+    } else if (value.includes('-')) {
+      value.split('-').forEach(item => {
+        fn(item, key);
+      });
     } else {
       fn(value, key);
     }
   });
-  return arr;
+  return $lybP6(arr);
 }
 
 //判断是否为指定类型的文件链接
