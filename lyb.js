@@ -58,11 +58,11 @@ function $lybP5(min, max) {
 }
 
 //对象去重
-function $lybP6(data) {
+function $lybP6(data, key) {
   let arr = data;
   let obj = {};
   arr = arr.reduce((a, b) => {
-    obj[b.name] ? '' : (obj[b.name] = true && a.push(b));
+    obj[b[key]] ? '' : (obj[b[key]] = true && a.push(b));
     return a;
   }, []);
   return arr;
@@ -1174,11 +1174,7 @@ function $lybF13(data, value, keys) {
     );
   }
   keys.forEach(key => {
-    if ($lybP2(value) == 'array') {
-      value.forEach(item => {
-        fn(item, key);
-      });
-    } else if (value.includes('-')) {
+    if (value.includes('-')) {
       value.split('-').forEach(item => {
         fn(item, key);
       });
@@ -1186,7 +1182,24 @@ function $lybF13(data, value, keys) {
       fn(value, key);
     }
   });
-  return $lybP6(arr);
+  return arr;
+}
+
+//正则搜索(传入数组搜索)
+function $lybF13_arr(data, value, key) {
+  let arr = [];
+  function fn(item) {
+    let reg = new RegExp(item, 'i');
+    arr.push(
+      ...data.filter(item => {
+        return reg.test(item[key]);
+      }),
+    );
+  }
+  value.forEach(item => {
+    fn(item);
+  });
+  return arr;
 }
 
 //判断是否为指定类型的文件链接

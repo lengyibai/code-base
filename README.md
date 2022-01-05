@@ -93,7 +93,23 @@ $lybP5(min, max);
 $lybP6(arr);
 ```
 
-> 参数`obj`：传递数组
+> 参数`arr`：传递包含对象的是数组
+>
+> 参数`key`：根据指定属性来去重，一般为对象`id`值
+
+具体操作如下
+
+```js
+const arr = [
+  { id: 1, name: 'lyb' },
+  { id: 1, name: 'lengyibai' },
+  { id: 2, name: '冷弋白' },
+];
+
+console.log($lybP6(arr, 'id'));
+```
+
+
 
 # 功能类函数
 
@@ -381,7 +397,9 @@ console.log($lybF12('冷弋白')); //[ 'lengyibai', 'LengYiBai', 'lyb', 'LYB' ]
 
 > 支持各种关键属性搜索、支持拼音搜索、支持拼音简写搜索、不区分大小写、支持模糊查询
 >
-> 注：依赖于`$lybF12`、`$lybP2`、`$lybP6`
+> 如果输入框清空查询，则返回所有数据
+>
+> 注：依赖于`$lybF12`
 
 ```js
 $lybF13(data, value, keys);
@@ -392,15 +410,16 @@ $lybF13(data, value, keys);
 > 参数`value`：支持传递数组和字符串和`-`分隔的字符串
 >
 > 参数`keys`：传递一个数组，代表搜索的属性
+>
 
 具体操作如下
 
 ```js
 const obj = [
-  { name: '张三', age: 20 },
-  { name: '李四', age: 24 },
-  { name: '王五', age: 24 },
-  { name: '赵六', age: 24 },
+  { id:1, name: '张三', age: 20 },
+  { id:2, name: '李四', age: 24 },
+  { id:3, name: '王五', age: 24 },
+  { id:4, name: '赵六', age: 24 },
 ];
 
 console.log($lybF13(obj, 24, ['name', 'age']));
@@ -417,6 +436,36 @@ console.log($lybF13(obj, ['张三', 'ww'], ['name', 'age']));
 
 console.log($lybF13(obj, 'zs-lis', ['name', 'age']));
 // [ { name: '张三', age: 20 }, { name: '李四', age: 24 } ]
+```
+
+### 针对Element UI的下拉多选进行查询
+
+> 注：此时不需要依赖任何函数，但不支持拼音查询
+>
+> 如果下拉框清空查询，则需要进行一个判断，因为清空后组件会返回一个空数组，返回空数组则无法进行循环查询，则需要判断如果为空数组，则返回`[""]`去查询，这样查询才能返回所有数据
+
+```js
+$lybF13_arr(data, value, key);
+```
+
+> 参数`data`：传递一个数组，里面存有对象形式的数据
+>
+> 参数`value`：传递数组，数组内为需要搜索的值
+>
+> 参数`key`：传递字符串，代表搜索的属性
+
+具体操作如下
+
+```js
+const obj = [
+  { id:1, name: '张三', age: 20 },
+  { id:2, name: '李四', age: 24 },
+  { id:3, name: '王五', age: 24 },
+  { id:4, name: '赵六', age: 24 },
+];
+
+console.log($lybF13(obj, ['张三', '李四'], ['name', 'age']));
+// [ { name: '张三', age: 20 }, { name: '王五', age: 24 } ]
 ```
 
 ## 判断是否为指定类型的文件链接
