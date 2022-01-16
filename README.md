@@ -14,7 +14,7 @@
 ## 本地存储
 
 ```js
-const $lybP1 = {
+const $storage = {
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
@@ -32,19 +32,19 @@ const $lybP1 = {
 
 > 永久存储
 
-| API                    | 描述         |
-| ---------------------- | ------------ |
-| $lybP1.set(key, value) | 设置值       |
-| $lybP1.get(key)        | 获取值       |
-| $lybP1.del(key)        | 删除指定值   |
-| $lybP1.clear()         | 清空所有数据 |
+| API                      | 描述         |
+| ------------------------ | ------------ |
+| $storage.set(key, value) | 设置值       |
+| $storage.get(key)        | 获取值       |
+| $storage.del(key)        | 删除指定值   |
+| $storage.clear()         | 清空所有数据 |
 
 ## 返回数据类型
 
 > 返回的数据类型为全小写的字符串
 
 ```js
-$lybP2(o);
+$type(o);
 ```
 
 > 参数`o`：传递一个数据
@@ -53,12 +53,12 @@ $lybP2(o);
 
 ```js
 console.log(
-  $lybP2('5555'), //string
-  $lybP2(123), //number
-  $lybP2(false), //boolean
-  $lybP2([5, 5]), //array
-  $lybP2(function () {}), //function
-  $lybP2({ a: 1 }), //object
+  $type('5555'), //string
+  $type(123), //number
+  $type(false), //boolean
+  $type([5, 5]), //array
+  $type(function () {}), //function
+  $type({ a: 1 }), //object
 );
 ```
 
@@ -66,17 +66,17 @@ console.log(
 
 > 点击指定按钮或指定条件下全屏显示
 
-| 函数     | 描述             |
-| -------- | ---------------- |
-| $lybP3() | 调用函数开启全屏 |
-| $lybP4() | 调用函数关闭全屏 |
+| 函数      | 描述             |
+| --------- | ---------------- |
+| $isFull() | 调用函数开启全屏 |
+| $noFull() | 调用函数关闭全屏 |
 
 ## 随机数
 
 > 随机生成指定范围的数据，生成的数字会包含两个参数
 
 ```js
-$lybP5(min, max);
+$random(min, max);
 ```
 
 > 参数`min`：传递一个数字，最小值
@@ -90,7 +90,7 @@ $lybP5(min, max);
 > 去掉数组内相同的对象
 
 ```js
-$lybP6(arr);
+$objDelRep(arr);
 ```
 
 > 参数`arr`：传递包含对象的是数组
@@ -106,7 +106,7 @@ const arr = [
   { id: 2, name: '冷弋白' },
 ];
 
-console.log($lybP6(arr, 'id'));
+console.log($objDelRep(arr, 'id'));
 ```
 
 
@@ -118,7 +118,7 @@ console.log($lybP6(arr, 'id'));
 > 可判断是否为图片，并自定义不是图片和是图片后需要做的操作
 
 ```js
-$lybS1(obj);
+$getImgUrl(obj);
 ```
 
 > 传递一个对象
@@ -139,7 +139,7 @@ $lybS1(obj);
   <!-- JS -->
   <script>
     const el = document.querySelector('input');
-    $lybF1({
+    $getImgUrl({
       el,
       no() {
         alert('不是');
@@ -158,7 +158,7 @@ $lybS1(obj);
 > 双击选中元素内的所有文字
 
 ```js
-$lybF2(el);
+$selectText(el);
 ```
 
 > 参数`el`：传递一个字符串或数组
@@ -173,11 +173,11 @@ $lybF2(el);
 
   <!-- JS -->
   <script>
-    $lybF2('div');
-    $lybF2('.div1');
-    $lybF2('#div2');
+    $selectText('div');
+    $selectText('.div1');
+    $selectText('#div2');
     //或者
-    $lybF2(['div', '.div1', '#div2']);
+    $selectText(['div', '.div1', '#div2']);
   </script>
 </body>
 ```
@@ -231,13 +231,15 @@ export default {
 > 参数`fn`：传递一个函数
 >
 > 参数`wait`：传递一个毫秒
+>
+> 参数`mtm`：传递一个布尔值，是否立即执行，默认为`false`
 
 #### 延迟执行（常用）
 
 > 函数调用后，如果在规定时间内没有再次调用，那么就执行函数
 
 ```js
-$lybF3(fn, wait);
+$debounce(fn, wait, false);
 ```
 
 #### 立即执行
@@ -247,7 +249,7 @@ $lybF3(fn, wait);
 > 再次调用需要停止调用一定时间
 
 ```js
-$lybF4(fn, wait);
+$debounce(fn, wait, true);
 ```
 
 ### 节流
@@ -255,15 +257,17 @@ $lybF4(fn, wait);
 > 参数`fn`：传递一个函数
 >
 > 参数`wait`：传递一个毫秒
+>
+> 参数`mtm`：传递一个布尔值，是否立即执行，默认为`false`
 
-#### 延迟执行
+#### 延迟执行（常用）
 
 > 每次调用需要等待一定时间才会执行
 >
 > 执行后才会进行下一次调用
 
 ```js
-$lybF5(fn, wait);
+$throttle(fn, wait, false);
 ```
 
 #### 立即执行
@@ -273,7 +277,7 @@ $lybF5(fn, wait);
 > 再次调用需要等待一定时间
 
 ```js
-$lybF6(fn, wait);
+$throttle(fn, wait, true);
 ```
 
 ## 谷歌内核提示
@@ -281,7 +285,7 @@ $lybF6(fn, wait);
 > 如果浏览器版本未达到要求版本则提醒
 
 ```js
-$lybF8(obj);
+$bsVer(obj);
 ```
 
 > 传递一个对象
@@ -295,7 +299,7 @@ $lybF8(obj);
 具体操作如下
 
 ```js
-$lybF8({
+$bsVer({
   v: 70,
   yes(v) {
     alert('您的浏览器版本为' + v);
@@ -311,7 +315,7 @@ $lybF8({
 > 无详细介绍
 
 ```js
-$lybF9(num);
+$fmtNum(num);
 ```
 
 > 参数`num`：传递一个数字
@@ -319,7 +323,7 @@ $lybF9(num);
 具体操作如下
 
 ```js
-console.log($lybF9(666)); //1,000
+console.log($fmtNum(666)); //1,000
 ```
 
 ## 复制到剪切板
@@ -327,7 +331,7 @@ console.log($lybF9(666)); //1,000
 > 只能通过鼠标事件触发
 
 ```js
-$lybF10(str, fn);
+$copy(str, fn);
 ```
 
 > 参数`str`：传递一个字符串/数字
@@ -344,7 +348,7 @@ $lybF10(str, fn);
   <script>
     const btn = document.querySelector('button');
     btn.onclick = function () {
-      $lybF10('666', function () {
+      $copy('666', function () {
         console.log(text); //666
       });
     };
@@ -363,7 +367,7 @@ $lybF10(str, fn);
 > 另外可以通过`w`和`n`获取星期和时间戳
 
 ```js
-$lybF11(dates, fmt);
+$fmtTime(dates, fmt);
 ```
 
 > 参数`date`：传递时间类型的数据
@@ -374,7 +378,7 @@ $lybF11(dates, fmt);
 
 ```js
 const date = new Date('2000-05-09 09:30:05').getTime(); //假设这是后端传递过来的时间戳
-console.log($lybF11(date, 'YYYY-MM-DD hh:mm:ss w n')); //2000-5-09 09:30:05 周几 时间戳
+console.log($fmtTime(date, 'YYYY-MM-DD hh:mm:ss w n')); //2000-5-09 09:30:05 周几 时间戳
 ```
 
 ## 中文转拼音
@@ -382,7 +386,7 @@ console.log($lybF11(date, 'YYYY-MM-DD hh:mm:ss w n')); //2000-5-09 09:30:05 周�
 > 返回一个数组，里面存着各种格式的拼音
 
 ```js
-$lybF12(keyword);
+$pinyin(keyword);
 ```
 
 > 参数`keyword`：传递汉字
@@ -390,7 +394,7 @@ $lybF12(keyword);
 具体操作如下
 
 ```js
-console.log($lybF12('冷弋白')); //[ 'lengyibai', 'LengYiBai', 'lyb', 'LYB' ]
+console.log($pinyin('冷弋白')); //[ 'lengyibai', 'LengYiBai', 'lyb', 'LYB' ]
 ```
 
 ## 正则搜索
@@ -399,10 +403,10 @@ console.log($lybF12('冷弋白')); //[ 'lengyibai', 'LengYiBai', 'lyb', 'LYB' ]
 >
 > 如果输入框清空查询，则返回所有数据
 >
-> 注：依赖于`$lybF12`
+> 注：依赖于`$pinyin`
 
 ```js
-$lybF13(data, value, keys);
+$search(data, value, keys);
 ```
 
 > 参数`data`：传递一个数组，里面存有对象形式的数据
@@ -422,19 +426,19 @@ const obj = [
   { id:4, name: '赵六', age: 24 },
 ];
 
-console.log($lybF13(obj, 24, ['name', 'age']));
+console.log($search(obj, 24, ['name', 'age']));
 // [{ name: '李四', age: 24 }, { name: '王五', age: 24 }, { name: '赵六', age: 24 }]
 
-console.log($lybF13(obj, ['zs'], ['name', 'age']));
+console.log($search(obj, ['zs'], ['name', 'age']));
 // [{ name: '张三', age: 20 }]
 
-console.log($lybF13(obj, 'LiS', ['name', 'age']));
+console.log($search(obj, 'LiS', ['name', 'age']));
 // [ { name: '李四', age: 24 } ]
 
-console.log($lybF13(obj, ['张三', 'ww'], ['name', 'age']));
+console.log($search(obj, ['张三', 'ww'], ['name', 'age']));
 // [ { name: '张三', age: 20 }, { name: '王五', age: 24 } ]
 
-console.log($lybF13(obj, 'zs-lis', ['name', 'age']));
+console.log($search(obj, 'zs-lis', ['name', 'age']));
 // [ { name: '张三', age: 20 }, { name: '李四', age: 24 } ]
 ```
 
@@ -445,7 +449,7 @@ console.log($lybF13(obj, 'zs-lis', ['name', 'age']));
 > 如果下拉框清空查询，则需要进行一个判断，因为清空后组件会返回一个空数组，返回空数组则无法进行循环查询，则需要判断如果为空数组，则返回`[""]`去查询，这样查询才能返回所有数据
 
 ```js
-$lybF13_arr(data, value, key);
+$searchMul(data, value, key);
 ```
 
 > 参数`data`：传递一个数组，里面存有对象形式的数据
@@ -464,7 +468,7 @@ const obj = [
   { id:4, name: '赵六', age: 24 },
 ];
 
-console.log($lybF13(obj, ['张三', '李四'], ['name', 'age']));
+console.log($searchMul(obj, ['张三', '李四'], ['name', 'age']));
 // [ { name: '张三', age: 20 }, { name: '王五', age: 24 } ]
 ```
 
@@ -473,7 +477,7 @@ console.log($lybF13(obj, ['张三', '李四'], ['name', 'age']));
 > 目前只有图片和视频，可修改源码设置
 
 ```js
-$lybF14(url, type);
+$urlFileType(url, type);
 ```
 
 > 参数`url`：传递字符串，代表文件路径
@@ -483,10 +487,10 @@ $lybF14(url, type);
 具体操作如下
 
 ```js
-console.log($lybF14('文件.MP4', 'video')); //true
-console.log($lybF14('文件.PNG', 'video')); //false
-console.log($lybF14('文件.AVI', 'image')); //true
-console.log($lybF14('文件.JPEG', 'image')); //false
+console.log($urlFileType('文件.MP4', 'video')); //true
+console.log($urlFileType('文件.PNG', 'video')); //false
+console.log($urlFileType('文件.AVI', 'image')); //true
+console.log($urlFileType('文件.JPEG', 'image')); //false
 ```
 
 ## 全局替换指定字符串
@@ -494,7 +498,7 @@ console.log($lybF14('文件.JPEG', 'image')); //false
 > 替换字符串中所有匹配到的字符串
 
 ```js
-$lybF15(str, match, rep);
+$repStr(str, match, rep);
 ```
 
 > 参数`str`：传递字符串
@@ -507,7 +511,7 @@ $lybF15(str, match, rep);
 
 ```js
 const id = 'id: GROUP@TGS#GROUP4X4JBGRH2';
-console.log($lybF15(id, 'GROUP', '')); //@TGS#4X4JBGRH2
+console.log($repStr(id, 'GROUP', '')); //@TGS#4X4JBGRH2
 ```
 
 ## 获取文件名
@@ -515,7 +519,7 @@ console.log($lybF15(id, 'GROUP', '')); //@TGS#4X4JBGRH2
 > 不会截取到`.`
 
 ```js
-$lybF16(str);
+$getFileName(str);
 ```
 
 > 参数`str`：传递字符串
@@ -523,7 +527,7 @@ $lybF16(str);
 具体操作如下
 
 ```js
-console.log($lybF16('冷弋白.png'); //冷弋白
+console.log($getFileName('冷弋白.png'); //冷弋白
 ```
 
 ## 获取文件后缀名
@@ -531,7 +535,7 @@ console.log($lybF16('冷弋白.png'); //冷弋白
 > 可匹配多种后缀，如果后缀有大写字母，将自动转换为小写
 
 ```js
-$lybF17(str);
+$getFileSuf(str);
 ```
 
 > 参数`str`：传递字符串
@@ -539,7 +543,7 @@ $lybF17(str);
 具体操作如下
 
 ```js
-console.log($lybF17('冷弋白.png')); //png
+console.log($getFileSuf('冷弋白.png')); //png
 ```
 
 ## 根据时间段问候
@@ -547,7 +551,7 @@ console.log($lybF17('冷弋白.png')); //png
 > 可修改问候内容
 
 ```js
-$lybS18({
+$timeGreet({
   a: '午夜好',
   b: '早上好',
   c: '上午好',
@@ -562,7 +566,7 @@ $lybS18({
 具体操作如下
 
 ```js
-console.log($lybF18({ a: '都第二天了，该睡了' })); //根据你当前的时间段显示内容
+console.log($timeGreet({ a: '都第二天了，该睡了' })); //根据你当前的时间段显示内容
 /*
 4点之前：午夜
 10点之前：早上
@@ -578,8 +582,8 @@ console.log($lybF18({ a: '都第二天了，该睡了' })); //根据你当前的
 > 支持数组和数组内的对象
 
 ```js
-$lybF19(data, rev);
-$lybF19(data, key, rev);
+$typeSort(data, rev);
+$typeSort(data, key, rev);
 ```
 
 | 对象属性 | 说明                                  | 类型    | 是否必填                         | 默认值 |
@@ -598,7 +602,7 @@ var data = [
 ];
 let num = [1, 5, 3, 2, 4, 5, 3, 6, 9];
 
-console.log($lybF18(data, 'name'));
+console.log($typeSort(data, 'name'));
 /*
 [
   { id: 1, abbr: 'hw', name: '华为', time: '2019-04-22 10:00:19' },
@@ -606,7 +610,7 @@ console.log($lybF18(data, 'name'));
   { id: 2, abbr: 'xm', name: '小米', time: '2019-04-22 10:00:18' }
 ]
 */
-console.log($lybF18(data, false)); //[ 9, 6, 5, 5, 4, 3, 3, 2, 1 ]
+console.log($typeSort(data, false)); //[ 9, 6, 5, 5, 4, 3, 3, 2, 1 ]
 ```
 
 ## 字节格式化
@@ -616,7 +620,7 @@ console.log($lybF18(data, false)); //[ 9, 6, 5, 5, 4, 3, 3, 2, 1 ]
 > 返回一个数组，数组元素分别是`['大小','单位','大小单位']`
 
 ```js
-$lybF20(bytes);
+$fmtByte(bytes);
 ```
 
 > 参数`bytes`：传递文件字节大小
@@ -624,8 +628,8 @@ $lybF20(bytes);
 具体操作如下
 
 ```js
-console.log($lybF20(2000)); //['1.95', 'KB', '1.95 KB']
-console.log($lybF20(2048)); //['2.00', 'KB', '2.00 KB']
+console.log($fmtByte(2000)); //['1.95', 'KB', '1.95 KB']
+console.log($fmtByte(2048)); //['2.00', 'KB', '2.00 KB']
 ```
 
 ## 秒数格式化
@@ -633,7 +637,7 @@ console.log($lybF20(2048)); //['2.00', 'KB', '2.00 KB']
 > 返回一个数组，数组元素分别是`['时','分','秒','时:分:秒']`
 
 ```js
-$lybF21(seconds);
+$fmtSec(seconds);
 ```
 
 > 参数`seconds`：传递秒数
@@ -641,7 +645,7 @@ $lybF21(seconds);
 具体操作如下
 
 ```js
-console.log($lybF21(99999)); //[ 27, 46, 39, '27:46:39' ]
+console.log($fmtSec(99999)); //[ 27, 46, 39, '27:46:39' ]
 ```
 
 ## 小数、百分比互转
@@ -651,7 +655,7 @@ console.log($lybF21(99999)); //[ 27, 46, 39, '27:46:39' ]
 > 转为百分比只会保留一位小数
 
 ```js
-$lybF22(i, ret);
+$potEoPct(i, ret);
 ```
 
 > 参数`i`：传递字符串的百分比或数字
@@ -661,8 +665,8 @@ $lybF22(i, ret);
 具体操作如下
 
 ```js
-console.log($lybF22(0.12345, 2)); //12.35
-console.log($lybF22('12.34%')); //0.1234
+console.log($potEoPct(0.12345, 2)); //12.35
+console.log($potEoPct('12.34%')); //0.1234
 ```
 
 
@@ -676,7 +680,7 @@ console.log($lybF22('12.34%')); //0.1234
 > 前提是父元素加了定位、被拖拽元素加了`绝对定位`
 
 ```js
-$lybS1([dom,dom,...])
+$dragEl([dom,dom,...])
 ```
 
 > 传递一个数组
@@ -701,49 +705,7 @@ $lybS1([dom,dom,...])
     const div = document.querySelectorAll('div');
     const li = document.querySelectorAll('li');
     const p = document.querySelector('p');
-    $lybS1([div, li, p]);
-  </script>
-</body>
-```
-
-## 返回顶部
-
-> 达到指定位置显示返回顶部按钮
->
-> 点击按钮，以动画形式返回顶部
-
-```js
-$lybS3(obj);
-```
-
-> 传递一个对象
-
-| 对象属性 | 说明                                              | 类型     | 是否必填 | 默认值                                                       |
-| -------- | ------------------------------------------------- | -------- | -------- | ------------------------------------------------------------ |
-| el       | 传递一个已经通过*document.querSelector*获取的元素 | DOM 元素 | 是       | -                                                            |
-| y        | 达到多少像素显示返回顶部按钮                      | Number   | 否       | 300                                                          |
-| fn1      | 返回顶部按钮如何出现                              | Function | 否       | 无需给按钮设置定位和偏移，已设置为左下角，从下往上的动画出现 |
-| fn2      | 返回顶部按钮如何隐藏                              | Function | 否       | 无需给按钮设置定位和偏移，已设置为左下角，从上往下隐藏       |
-
-具体操作如下
-
-```html
-<body>
-  <div class="backTop">返回顶部</div>
-
-  <!-- JS -->
-  <script>
-    const backTop = document.querSelector('.backTop');
-    $lybS3({
-      el: backTop,
-      y: 300,
-      fn1: () => {
-        el.style.bottom = '-200px';
-      },
-      fn2: () => {
-        el.style.bottom = '100px';
-      },
-    });
+    $dragEl([div, li, p]);
   </script>
 </body>
 ```
