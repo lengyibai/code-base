@@ -1,7 +1,7 @@
 /* 原生 */
 
 //本地存储
-const $lybP1 = {
+const $storage = {
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
@@ -17,7 +17,7 @@ const $lybP1 = {
 };
 
 //返回数据类型
-function $lybP2(o) {
+function $type(o) {
   return Object.prototype.toString
     .call(o)
     .substr(8)
@@ -26,7 +26,7 @@ function $lybP2(o) {
 }
 
 //开启全屏显示
-function $lybP3() {
+function $isFull() {
   const docElm = document.documentElement;
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen();
@@ -40,7 +40,7 @@ function $lybP3() {
 }
 
 //关闭全屏显示
-function $lybP4() {
+function $noFull() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
@@ -53,12 +53,12 @@ function $lybP4() {
 }
 
 //随机数
-function $lybP5(min, max) {
+function $random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //对象去重
-function $lybP6(data, key) {
+function $objDelRep(data, key) {
   let arr = data;
   let obj = {};
   arr = arr.reduce((a, b) => {
@@ -71,7 +71,7 @@ function $lybP6(data, key) {
 /* 功能 */
 
 //获取图片路径
-function $lybF1(obj) {
+function $getImgUrl(obj) {
   const { el, yes = null, no = null, format = '.jpeg.jpg.png' } = obj;
   el.addEventListener('change', () => {
     let strFilter = format;
@@ -88,7 +88,7 @@ function $lybF1(obj) {
 }
 
 //双击选中文字
-function $lybF2(el) {
+function $selectText(el) {
   if (typeof el == 'string') {
     fn(el);
   } else if (el instanceof Array) {
@@ -107,70 +107,68 @@ function $lybF2(el) {
   }
 }
 
-//防抖（延迟执行）
-function $lybF3(fn, delay) {
-  return function (args) {
-    let that = this;
-    let _args = args;
-    clearTimeout(fn.id);
-    fn.id = setTimeout(function () {
-      fn.call(that, _args);
-    }, delay);
-  };
-}
-
-//防抖（立即执行）
-function $lybF4(fn, delay) {
-  let timer;
-  return function () {
-    let context = this;
-    let args = arguments;
-    if (timer) clearTimeout(timer);
-    let callNow = !timer;
-    timer = setTimeout(() => {
-      timer = null;
-    }, delay);
-    if (callNow) fn.apply(context, args);
-  };
+//防抖
+function $debounce(fn, delay, mtm = false) {
+  if (mtm) {
+    let timer;
+    return function () {
+      let context = this;
+      let args = arguments;
+      if (timer) clearTimeout(timer);
+      let callNow = !timer;
+      timer = setTimeout(() => {
+        timer = null;
+      }, delay);
+      if (callNow) fn.apply(context, args);
+    };
+  } else {
+    return function (args) {
+      let that = this;
+      let _args = args;
+      clearTimeout(fn.id);
+      fn.id = setTimeout(function () {
+        fn.call(that, _args);
+      }, delay);
+    };
+  }
 }
 
 //节流（延迟执行）
-function $lybF5(fn, delay) {
-  let valid = true;
-  return () => {
-    if (!valid) {
-      return false;
-    }
-    valid = false;
-    setTimeout(() => {
-      fn();
-      valid = true;
-    }, delay);
-  };
-}
-
-//节流（立即执行）
-function $lybF6(fn, delay) {
-  let last, deferTimer;
-  return function (args) {
-    let that = this;
-    let _args = args;
-    let now = +new Date();
-    if (last && now < last + delay) {
-      clearTimeout(deferTimer);
-      deferTimer = setTimeout(function () {
+function $throttle(fn, delay, mtm = false) {
+  if (mtm) {
+    let last, deferTimer;
+    return function (args) {
+      let that = this;
+      let _args = args;
+      let now = +new Date();
+      if (last && now < last + delay) {
+        clearTimeout(deferTimer);
+        deferTimer = setTimeout(function () {
+          last = now;
+          fn.apply(that, _args);
+        }, delay);
+      } else {
         last = now;
         fn.apply(that, _args);
+      }
+    };
+  } else {
+    let valid = true;
+    return () => {
+      if (!valid) {
+        return false;
+      }
+      valid = false;
+      setTimeout(() => {
+        fn();
+        valid = true;
       }, delay);
-    } else {
-      last = now;
-      fn.apply(that, _args);
-    }
-  };
+    };
+  }
 }
 
 //浏览器版本提醒
-function $lybF8(obj) {
+function $bsVer(obj) {
   const {
     v = 80,
     yes = version => {
@@ -198,9 +196,8 @@ function $lybF8(obj) {
     }
   }
 }
-
 //数字每三位加逗号
-function $lybF9(num) {
+function $fmtNum(num) {
   const str = num.toString();
   const reg =
     str.indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
@@ -208,7 +205,7 @@ function $lybF9(num) {
 }
 
 //复制到剪切板
-function $lybF10(text, fn = () => {}) {
+function $copy(text, fn = () => {}) {
   const tag = document.createElement('input');
   tag.setAttribute('id', 'lybFA10');
   tag.value = text;
@@ -220,7 +217,7 @@ function $lybF10(text, fn = () => {}) {
 }
 
 // 日期格式化
-function $lybF11(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
+function $fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
   date = new Date(date);
   let ret,
     week = ['日', '一', '二', '三', '四', '五', '六'];
@@ -247,7 +244,7 @@ function $lybF11(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
 }
 
 //中文转拼音
-function $lybF12(keyword) {
+function $pinyin(keyword) {
   let pinyin = ((...args) => {
     let Pinyin = function (ops) {
         this.initialize(ops);
@@ -1163,7 +1160,7 @@ function $lybF12(keyword) {
 }
 
 //正则搜索
-function $lybF13(data, value, keys) {
+function $search(data, value, keys) {
   let arr = [];
   function fn(item, key) {
     let reg = new RegExp(item, 'i');
@@ -1186,7 +1183,7 @@ function $lybF13(data, value, keys) {
 }
 
 //正则搜索(传入数组搜索)
-function $lybF13_arr(data, value, key) {
+function $searchMul(data, value, key) {
   let arr = [];
   function fn(item) {
     let reg = new RegExp(item, 'i');
@@ -1203,7 +1200,7 @@ function $lybF13_arr(data, value, key) {
 }
 
 //判断是否为指定类型的文件链接
-function $lybF14(url, type) {
+function $urlFileType(url, type) {
   const image = ['jpeg', 'jpg', 'png', 'webp', 'bmp', 'gif', 'svg'];
   const video = ['avi', 'mov', 'rmvb', 'rm', 'flv', 'mp4', '3gp'];
   const obj = {
@@ -1214,22 +1211,22 @@ function $lybF14(url, type) {
 }
 
 //全局替换指定字符串
-function $lybF15(str, match, rep = '') {
+function $repStr(str, match, rep = '') {
   return str.replace(new RegExp(match, 'g'), rep);
 }
 
 //获取文件名
-function $lybF16(str) {
+function $getFileName(str) {
   return str.replace(/\.\w+$/, '');
 }
 
 //获取文件后缀名
-function $lybF17(str) {
+function $getFileSuf(str) {
   return str.replace(/.+\./, '').toLowerCase();
 }
 
 //根据时间段问候
-function $lybF18(greet = {}) {
+function $timeGreet(greet = {}) {
   const {
     a = '午夜好',
     b = '早上好',
@@ -1253,7 +1250,7 @@ function $lybF18(greet = {}) {
 }
 
 //排序支持数字&字母&时间&中文
-function $lybF19(data, key, rev = true) {
+function $typeSort(data, key, rev = true) {
   const num = typeof key == 'boolean' ? (key ? 1 : -1) : rev ? 1 : -1;
   return data.sort((a, b) => {
     return typeof data[0] == 'object'
@@ -1263,7 +1260,7 @@ function $lybF19(data, key, rev = true) {
 }
 
 // 字节格式化
-function $lybF20(bytes) {
+function $fmtByte(bytes) {
   if (bytes == 0) return [0, 'B', '0 B'];
   let k = 1024,
     size = 0,
@@ -1274,7 +1271,7 @@ function $lybF20(bytes) {
 }
 
 //秒数格式化
-function $lybF21(seconds) {
+function $fmtSec(seconds) {
   let hour =
     Math.floor(seconds / 3600) >= 10
       ? Math.floor(seconds / 3600)
@@ -1289,7 +1286,8 @@ function $lybF21(seconds) {
   return [hour, min, sec, `${hour}:${min}:${sec}`];
 }
 
-function $lybF22(str, ret = 0) {
+//小数百分比互转
+function $potEoPct(str, ret = 0) {
   if (typeof str == 'string') {
     return str.replace('%', '') / 100;
   } else {
@@ -1300,7 +1298,7 @@ function $lybF22(str, ret = 0) {
 /* 样式 */
 
 //自定义拖拽元素
-function $lybS1(el) {
+function $dragEl(el) {
   let newArr = [];
   el.forEach(item => {
     if (item.length != undefined) {
@@ -1349,38 +1347,5 @@ function $lybS1(el) {
         window.removeEventListener('mousemove', fn);
       });
     });
-  }
-}
-
-//返回顶部
-function $lybS3(obj) {
-  let {
-    el,
-    y = 300,
-    fn1 = () => {
-      el.style.right = `${document.body.offsetWidth / 10}px`;
-      el.style.bottom = `${document.body.offsetHeight / -5}px`;
-    },
-    fn2 = () => {
-      el.style.bottom = `${document.body.offsetHeight / 7.5}px`;
-    },
-  } = obj;
-  fn1();
-  const d = document.documentElement;
-  const b = document.body;
-  el.style.transition = 'all 0.25s';
-  el.style.position = 'fixed';
-  window.onscroll = $lybF5(set, 250);
-  el.onclick = function () {
-    window.onscroll = null;
-    this.timer = setInterval(() => {
-      d.scrollTop -= Math.ceil((d.scrollTop + b.scrollTop) * 0.1);
-      b.scrollTop -= Math.ceil((d.scrollTop + b.scrollTop) * 0.1);
-      if (d.scrollTop + b.scrollTop == 0)
-        clearInterval(el.timer, (window.onscroll = set));
-    }, 10);
-  };
-  function set() {
-    el.style.display = d.scrollTop + b.scrollTop > y ? fn2() : fn1();
   }
 }
