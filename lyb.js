@@ -1289,6 +1289,14 @@ function $lybF21(seconds) {
   return [hour, min, sec, `${hour}:${min}:${sec}`];
 }
 
+function $lybF22(str, ret = 0) {
+  if (typeof str == 'string') {
+    return str.replace('%', '') / 100;
+  } else {
+    return Number((str * 100).toFixed(ret));
+  }
+}
+
 /* 样式 */
 
 //自定义拖拽元素
