@@ -206,13 +206,7 @@ function $fmtNum(num) {
 
 //复制到剪切板
 function $copy(text, fn = () => {}) {
-  const tag = document.createElement('input');
-  tag.setAttribute('id', 'lybFA10');
-  tag.value = text;
-  document.body.appendChild(tag);
-  document.getElementById('lybFA10').select();
-  document.execCommand('copy');
-  document.getElementById('lybFA10').remove();
+  navigator.clipboard.writeText(text);
   fn(text);
 }
 
@@ -1166,7 +1160,7 @@ function $search(data, value, keys) {
     let reg = new RegExp(item, 'i');
     arr.push(
       ...data.filter(item => {
-        return reg.test($lybF12(item[key].toString())) || reg.test(item[key]);
+        return reg.test($pinyin(item[key].toString())) || reg.test(item[key]);
       }),
     );
   }
