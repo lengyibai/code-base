@@ -1,7 +1,7 @@
 /* 原生 */
 
 //本地存储
-const $storage = {
+export const storage = {
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
@@ -17,7 +17,7 @@ const $storage = {
 };
 
 //返回数据类型
-function $type(o) {
+export function type(o) {
   return Object.prototype.toString
     .call(o)
     .substr(8)
@@ -26,7 +26,7 @@ function $type(o) {
 }
 
 //开启全屏显示
-function $isFull() {
+export function isFull() {
   const docElm = document.documentElement;
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen();
@@ -40,7 +40,7 @@ function $isFull() {
 }
 
 //关闭全屏显示
-function $noFull() {
+export function noFull() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
@@ -53,12 +53,12 @@ function $noFull() {
 }
 
 //随机数
-function $random(min, max) {
+export function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //对象去重
-function $objDelRep(data, key) {
+export function objDelRep(data, key) {
   let arr = data;
   let obj = {};
   arr = arr.reduce((a, b) => {
@@ -70,45 +70,8 @@ function $objDelRep(data, key) {
 
 /* 功能 */
 
-//获取图片路径
-function $getImgUrl(obj) {
-  const { el, yes = null, no = null, format = '.jpeg.jpg.png' } = obj;
-  el.addEventListener('change', () => {
-    let strFilter = format;
-    let p = el.value.lastIndexOf('.');
-    let strPostfix = el.value.substring(p, el.value.length);
-    strPostfix = strPostfix.toLowerCase();
-    if (el.value.indexOf('.') > -1 && strFilter.indexOf(strPostfix) > -1) {
-      yes(window.URL.createObjectURL(el.files[0]));
-    } else {
-      el.value = '';
-      no();
-    }
-  });
-}
-
-//双击选中文字
-function $selectText(el) {
-  if (typeof el == 'string') {
-    fn(el);
-  } else if (el instanceof Array) {
-    el.forEach(item => {
-      fn(item);
-    });
-  }
-  function fn(a) {
-    document.querySelector(a).addEventListener('dblclick', function () {
-      const selection = window.getSelection();
-      window.getSelection().removeAllRanges();
-      const range = document.createRange();
-      range.selectNodeContents(this.firstChild);
-      selection.addRange(range);
-    });
-  }
-}
-
 //防抖
-function $debounce(fn, delay, mtm = false) {
+export function debounce(fn, delay, mtm = false) {
   if (mtm) {
     let timer;
     return function () {
@@ -134,7 +97,7 @@ function $debounce(fn, delay, mtm = false) {
 }
 
 //节流（延迟执行）
-function $throttle(fn, delay, mtm = false) {
+export function throttle(fn, delay, mtm = false) {
   if (mtm) {
     let last, deferTimer;
     return function (args) {
@@ -167,37 +130,17 @@ function $throttle(fn, delay, mtm = false) {
   }
 }
 
-//浏览器版本提醒
-function $bsVer(obj) {
-  const {
-    v = 80,
-    yes = version => {
-      alert(`您的浏览器内核版本号：${version}`);
-    },
-    no = version => {
-      alert(`您的浏览器内核版本为${version}，可能会影响体验!`);
-    },
-  } = obj;
-  const arr = navigator.userAgent.split(' ');
-  let chromeVersion = '';
-  arr.forEach(item => {
-    if (/chrome/i.test(item)) {
-      chromeVersion = item;
-    }
+//获取浏览器版本
+export function chromeV() {
+  let v = '';
+  navigator.userAgent.split(' ').forEach(item => {
+    /chrome/i.test(item) && (v = item);
   });
-  if (chromeVersion) {
-    if (Number(chromeVersion.split('/')[1].split('.')[0])) {
-      const version = Number(chromeVersion.split('/')[1].split('.')[0]);
-      if (version > v) {
-        yes(version);
-      } else {
-        no(version);
-      }
-    }
-  }
+  return Number(v.split('/')[1].split('.')[0]);
 }
+
 //数字每三位加逗号
-function $fmtNum(num) {
+export function fmtNum(num) {
   const str = num.toString();
   const reg =
     str.indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
@@ -205,13 +148,13 @@ function $fmtNum(num) {
 }
 
 //复制到剪切板
-function $copy(text, fn = () => {}) {
+export function copy(text, fn = () => {}) {
   navigator.clipboard.writeText(text);
   fn(text);
 }
 
 // 日期格式化
-function $fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
+export function fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
   date = new Date(date);
   let ret,
     week = ['日', '一', '二', '三', '四', '五', '六'];
@@ -238,7 +181,7 @@ function $fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
 }
 
 //中文转拼音
-function $pinyin(keyword) {
+export function pinyin(keyword) {
   let pinyin = ((...args) => {
     let Pinyin = function (ops) {
         this.initialize(ops);
@@ -1154,7 +1097,7 @@ function $pinyin(keyword) {
 }
 
 //正则搜索
-function $search(data, value, keys) {
+export function search(data, value, keys) {
   let arr = [];
   function fn(item, key) {
     let reg = new RegExp(item, 'i');
@@ -1177,7 +1120,7 @@ function $search(data, value, keys) {
 }
 
 //正则搜索(传入数组搜索)
-function $searchMul(data, value, key) {
+export function searchMul(data, value, key) {
   let arr = [];
   function fn(item) {
     let reg = new RegExp(item, 'i');
@@ -1194,33 +1137,33 @@ function $searchMul(data, value, key) {
 }
 
 //判断是否为指定类型的文件链接
-function $urlFileType(url, type) {
-  const image = ['jpeg', 'jpg', 'png', 'webp', 'bmp', 'gif', 'svg'];
-  const video = ['avi', 'mov', 'rmvb', 'rm', 'flv', 'mp4', '3gp'];
+export function urlFileType(url, type) {
   const obj = {
-    image: image.includes(url.replace(/.+\./, '').toLowerCase()),
-    video: video.includes(url.replace(/.+\./, '').toLowerCase()),
+    image: ['jpeg', 'jpg', 'png', 'webp', 'bmp', 'gif', 'svg'],
+    video: ['avi', 'mov', 'rmvb', 'rm', 'flv', 'mp4', '3gp'],
   };
-  return obj[type];
+  if (type instanceof Array)
+    return type.includes(url.replace(/.+\./, '').toLowerCase());
+  return obj[type].includes(url.replace(/.+\./, '').toLowerCase());
 }
 
 //全局替换指定字符串
-function $repStr(str, match, rep = '') {
+export function repStr(str, match, rep = '') {
   return str.replace(new RegExp(match, 'g'), rep);
 }
 
 //获取文件名
-function $getFileName(str) {
+export function getFileName(str) {
   return str.replace(/\.\w+$/, '');
 }
 
 //获取文件后缀名
-function $getFileSuf(str) {
+export function getFileSuf(str) {
   return str.replace(/.+\./, '').toLowerCase();
 }
 
 //根据时间段问候
-function $timeGreet(greet = {}) {
+export function timeGreet(greet = {}) {
   const {
     a = '午夜好',
     b = '早上好',
@@ -1244,7 +1187,7 @@ function $timeGreet(greet = {}) {
 }
 
 //排序支持数字&字母&时间&中文
-function $typeSort(data, key, rev = true) {
+export function typeSort(data, key, rev = true) {
   const num = typeof key == 'boolean' ? (key ? 1 : -1) : rev ? 1 : -1;
   return data.sort((a, b) => {
     return typeof data[0] == 'object'
@@ -1254,7 +1197,7 @@ function $typeSort(data, key, rev = true) {
 }
 
 // 字节格式化
-function $fmtByte(bytes) {
+export function fmtByte(bytes) {
   if (bytes == 0) return [0, 'B', '0 B'];
   let k = 1024,
     size = 0,
@@ -1265,7 +1208,7 @@ function $fmtByte(bytes) {
 }
 
 //秒数格式化
-function $fmtSec(seconds) {
+export function fmtSec(seconds) {
   let hour =
     Math.floor(seconds / 3600) >= 10
       ? Math.floor(seconds / 3600)
@@ -1281,7 +1224,7 @@ function $fmtSec(seconds) {
 }
 
 //小数百分比互转
-function $potEoPct(str, ret = 0) {
+export function potEoPct(str, ret = 0) {
   if (typeof str == 'string') {
     return str.replace('%', '') / 100;
   } else {
@@ -1292,7 +1235,7 @@ function $potEoPct(str, ret = 0) {
 /* 样式 */
 
 //自定义拖拽元素
-function $dragEl(el) {
+export function dragEl(el) {
   let newArr = [];
   el.forEach(item => {
     if (item.length != undefined) {
