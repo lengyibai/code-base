@@ -99,8 +99,6 @@ import * as $ from './lyb.js';
 console.log($.chromeV());
 ```
 
-
-
 # 功能类函数
 
 ## 防抖节流
@@ -291,16 +289,15 @@ $.search(data, value, keys);
 > 参数`value`：支持传递数组和字符串和`-`分隔的字符串
 >
 > 参数`keys`：传递一个数组，代表搜索的属性
->
 
 ```js
 import * as $ from './lyb.js';
 
 const obj = [
-  { id:1, name: '张三', age: 20 },
-  { id:2, name: '李四', age: 24 },
-  { id:3, name: '王五', age: 24 },
-  { id:4, name: '赵六', age: 24 },
+  { id: 1, name: '张三', age: 20 },
+  { id: 2, name: '李四', age: 24 },
+  { id: 3, name: '王五', age: 24 },
+  { id: 4, name: '赵六', age: 24 },
 ];
 
 console.log($.search(obj, 24, ['name', 'age']));
@@ -319,7 +316,7 @@ console.log($.search(obj, 'zs-lis', ['name', 'age']));
 // [ { name: '张三', age: 20 }, { name: '李四', age: 24 } ]
 ```
 
-### 针对Element UI的下拉多选进行查询
+### 针对 Element UI 的下拉多选进行查询
 
 > 注：此时不需要依赖任何函数，但不支持拼音查询，况且也不可能拼音查询
 >
@@ -339,10 +336,10 @@ $.searchMul(data, value, key);
 import * as $ from './lyb.js';
 
 const obj = [
-  { id:1, name: '张三', age: 20 },
-  { id:2, name: '李四', age: 24 },
-  { id:3, name: '王五', age: 24 },
-  { id:4, name: '赵六', age: 24 },
+  { id: 1, name: '张三', age: 20 },
+  { id: 2, name: '李四', age: 24 },
+  { id: 3, name: '王五', age: 24 },
+  { id: 4, name: '赵六', age: 24 },
 ];
 
 console.log($.searchMul(obj, ['张三', '李四'], 'name'));
@@ -512,8 +509,6 @@ console.log($.potEoPct(0.12345, 2)); //12.35
 console.log($.potEoPct('12.34%')); //0.1234
 ```
 
-
-
 # 样式类函数
 
 ## 自定义拖拽元素
@@ -543,7 +538,7 @@ $dragEl([dom,dom,...])
 
   <!-- JS -->
   <script type="module">
-  	import * as $ from './lyb.js';
+    import * as $ from './lyb.js';
     const div = document.querySelectorAll('div');
     const li = document.querySelectorAll('li');
     const p = document.querySelector('p');
