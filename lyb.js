@@ -1,7 +1,7 @@
 /* 原生 */
 
 //本地存储
-export const storage = {
+export const $storage = {
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   },
@@ -17,7 +17,7 @@ export const storage = {
 };
 
 //返回数据类型
-export function type(o) {
+export function $type(o) {
   return Object.prototype.toString
     .call(o)
     .substr(8)
@@ -26,7 +26,7 @@ export function type(o) {
 }
 
 //开启全屏显示
-export function isFull() {
+export function $isFull() {
   const docElm = document.documentElement;
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen();
@@ -40,7 +40,7 @@ export function isFull() {
 }
 
 //关闭全屏显示
-export function noFull() {
+export function $noFull() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
@@ -53,12 +53,12 @@ export function noFull() {
 }
 
 //随机数
-export function random(min, max) {
+export function $random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //对象去重
-export function objDelRep(data, key) {
+export function $objDelRep(data, key) {
   let arr = data;
   let obj = {};
   arr = arr.reduce((a, b) => {
@@ -71,7 +71,7 @@ export function objDelRep(data, key) {
 /* 功能 */
 
 //防抖
-export function debounce(fn, delay, mtm = false) {
+export function $debounce(fn, delay, mtm = false) {
   if (mtm) {
     let timer;
     return function () {
@@ -97,7 +97,7 @@ export function debounce(fn, delay, mtm = false) {
 }
 
 //节流（延迟执行）
-export function throttle(fn, delay, mtm = false) {
+export function $throttle(fn, delay, mtm = false) {
   if (mtm) {
     let last, deferTimer;
     return function (args) {
@@ -131,7 +131,7 @@ export function throttle(fn, delay, mtm = false) {
 }
 
 //获取浏览器版本
-export function chromeV() {
+export function $chromeV() {
   let v = '';
   navigator.userAgent.split(' ').forEach(item => {
     /chrome/i.test(item) && (v = item);
@@ -140,7 +140,7 @@ export function chromeV() {
 }
 
 //数字每三位加逗号
-export function fmtNum(num) {
+export function $fmtNum(num) {
   const str = num.toString();
   const reg =
     str.indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
@@ -148,13 +148,13 @@ export function fmtNum(num) {
 }
 
 //复制到剪切板
-export function copy(text, fn = () => {}) {
+export function $copy(text, fn = () => {}) {
   navigator.clipboard.writeText(text);
   fn(text);
 }
 
 // 日期格式化
-export function fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
+export function $fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
   date = new Date(date);
   let ret,
     week = ['日', '一', '二', '三', '四', '五', '六'];
@@ -181,7 +181,7 @@ export function fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
 }
 
 //中文转拼音
-export function pinyin(keyword) {
+export function $pinyin(keyword) {
   let pinyin = ((...args) => {
     let Pinyin = function (ops) {
         this.initialize(ops);
@@ -1097,7 +1097,7 @@ export function pinyin(keyword) {
 }
 
 //正则搜索
-export function search(data, value, keys) {
+export function $search(data, value, keys) {
   let arr = [];
   function fn(item, key) {
     let reg = new RegExp(item, 'i');
@@ -1120,7 +1120,7 @@ export function search(data, value, keys) {
 }
 
 //正则搜索(传入数组搜索)
-export function searchMul(data, value, key) {
+export function $searchMul(data, value, key) {
   let arr = [];
   function fn(item) {
     let reg = new RegExp(item, 'i');
@@ -1137,7 +1137,7 @@ export function searchMul(data, value, key) {
 }
 
 //判断是否为指定类型的文件链接
-export function urlFileType(url, type) {
+export function $urlFileType(url, type) {
   const obj = {
     image: ['jpeg', 'jpg', 'png', 'webp', 'bmp', 'gif', 'svg'],
     video: ['avi', 'mov', 'rmvb', 'rm', 'flv', 'mp4', '3gp'],
@@ -1148,22 +1148,22 @@ export function urlFileType(url, type) {
 }
 
 //全局替换指定字符串
-export function repStr(str, match, rep = '') {
+export function $repStr(str, match, rep = '') {
   return str.replace(new RegExp(match, 'g'), rep);
 }
 
 //获取文件名
-export function getFileName(str) {
+export function $getFileName(str) {
   return str.replace(/\.\w+$/, '');
 }
 
 //获取文件后缀名
-export function getFileSuf(str) {
+export function $getFileSuf(str) {
   return str.replace(/.+\./, '').toLowerCase();
 }
 
 //根据时间段问候
-export function timeGreet(greet = {}) {
+export function $timeGreet(greet = {}) {
   const {
     a = '午夜好',
     b = '早上好',
@@ -1187,7 +1187,7 @@ export function timeGreet(greet = {}) {
 }
 
 //排序支持数字&字母&时间&中文
-export function typeSort(data, key, rev = true) {
+export function $typeSort(data, key, rev = true) {
   const num = typeof key == 'boolean' ? (key ? 1 : -1) : rev ? 1 : -1;
   return data.sort((a, b) => {
     return typeof data[0] == 'object'
@@ -1197,7 +1197,7 @@ export function typeSort(data, key, rev = true) {
 }
 
 // 字节格式化
-export function fmtByte(bytes) {
+export function $fmtByte(bytes) {
   if (bytes == 0) return [0, 'B', '0 B'];
   let k = 1024,
     size = 0,
@@ -1208,7 +1208,7 @@ export function fmtByte(bytes) {
 }
 
 //秒数格式化
-export function fmtSec(seconds) {
+export function $fmtSec(seconds) {
   let hour =
     Math.floor(seconds / 3600) >= 10
       ? Math.floor(seconds / 3600)
@@ -1224,7 +1224,7 @@ export function fmtSec(seconds) {
 }
 
 //小数百分比互转
-export function potEoPct(str, ret = 0) {
+export function $potEoPct(str, ret = 0) {
   if (typeof str == 'string') {
     return str.replace('%', '') / 100;
   } else {
@@ -1235,7 +1235,7 @@ export function potEoPct(str, ret = 0) {
 /* 样式 */
 
 //自定义拖拽元素
-export function dragEl(el) {
+export function $dragEl(el) {
   let newArr = [];
   el.forEach(item => {
     if (item.length != undefined) {
