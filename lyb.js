@@ -133,7 +133,7 @@ export function $throttle(fn, delay, mtm = false) {
 //获取浏览器版本
 export function $chromeV() {
   let v = '';
-  navigator.userAgent.split(' ').forEach(item => {
+  navigator.userAgent.split(' ').forEach((item) => {
     /chrome/i.test(item) && (v = item);
   });
   return Number(v.split('/')[1].split('.')[0]);
@@ -173,7 +173,7 @@ export function $fmtTime(date, fmt = 'YYYY-MM-DD hh:mm:ss') {
     if (ret) {
       fmt = fmt.replace(
         ret[1],
-        ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0'),
+        ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0')
       );
     }
   }
@@ -639,15 +639,10 @@ export function $pinyin(keyword) {
           20415: 'PB',
           20446: 'YS',
           20447: 'SQ',
+          20857: 'ZC',
           20504: 'TC',
           20608: 'KG',
           20854: 'QJ',
-          20857: 'ZC',
-          20911: 'PF',
-          20504: 'TC',
-          20608: 'KG',
-          20854: 'QJ',
-          20857: 'ZC',
           20911: 'PF',
           20985: 'AW',
           21032: 'PB',
@@ -997,7 +992,6 @@ export function $pinyin(keyword) {
       getFullChars(str) {
         let result = '',
           name;
-        let reg = new RegExp('[a-zA-Z0-9- ]');
         for (let i = 0, len = str.length; i < len; i++) {
           let ch = str.substr(i, 1),
             unicode = ch.charCodeAt(0);
@@ -1031,7 +1025,6 @@ export function $pinyin(keyword) {
         for (let key in this.full_dict) {
           if (-1 !== this.full_dict[key].indexOf(str)) {
             return this._capitalize(key);
-            break;
           }
         }
         return false;
@@ -1063,7 +1056,7 @@ export function $pinyin(keyword) {
             strlen = str.length;
           if (strlen == 1) {
             for (let j = 0; j < result.length; j++) {
-              result[k] += str;
+              result[j] += str;
             }
           } else {
             let swap1 = result.slice(0);
@@ -1102,14 +1095,14 @@ export function $search(data, value, keys) {
   function fn(item, key) {
     let reg = new RegExp(item, 'i');
     arr.push(
-      ...data.filter(item => {
+      ...data.filter((item) => {
         return reg.test($pinyin(item[key].toString())) || reg.test(item[key]);
-      }),
+      })
     );
   }
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (value.includes('-')) {
-      value.split('-').forEach(item => {
+      value.split('-').forEach((item) => {
         fn(item, key);
       });
     } else {
@@ -1125,12 +1118,12 @@ export function $searchMul(data, value, key) {
   function fn(item) {
     let reg = new RegExp(item, 'i');
     arr.push(
-      ...data.filter(item => {
+      ...data.filter((item) => {
         return reg.test(item[key]);
-      }),
+      })
     );
   }
-  value.forEach(item => {
+  value.forEach((item) => {
     fn(item);
   });
   return arr;
@@ -1237,7 +1230,7 @@ export function $potEoPct(str, ret = 0) {
 //自定义拖拽元素
 export function $dragEl(el) {
   let newArr = [];
-  el.forEach(item => {
+  el.forEach((item) => {
     if (item.length != undefined) {
       item = Array.from(item);
       newArr.push(item);
@@ -1246,7 +1239,7 @@ export function $dragEl(el) {
     }
   });
   el = newArr.flat(Infinity);
-  el.forEach(item => {
+  el.forEach((item) => {
     fn(item);
   });
   function fn(el) {
@@ -1256,19 +1249,19 @@ export function $dragEl(el) {
       startY = 0,
       moveX = 0,
       moveY = 0;
-    el.addEventListener('touchstart', e => {
+    el.addEventListener('touchstart', (e) => {
       x = e.targetTouches[0].pageX;
       y = e.targetTouches[0].pageY;
       startX = el.offsetLeft;
       startY = el.offsetTop;
     });
-    el.addEventListener('touchmove', e => {
+    el.addEventListener('touchmove', (e) => {
       moveX = e.targetTouches[0].pageX - x;
       moveY = e.targetTouches[0].pageY - y;
       el.style.left = `${moveX + startX}px`;
       el.style.top = `${moveY + startY}px`;
     });
-    el.addEventListener('mousedown', e => {
+    el.addEventListener('mousedown', (e) => {
       x = e.pageX;
       y = e.pageY;
       startX = el.offsetLeft;
