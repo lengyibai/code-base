@@ -481,7 +481,7 @@ $dragEl([dom,dom,...])
   <p></p>
 
   <!-- JS -->
-  <script type="module">
+  <script>
     const div = document.querySelectorAll('div');
     const li = document.querySelectorAll('li');
     const p = document.querySelector('p');
@@ -489,3 +489,29 @@ $dragEl([dom,dom,...])
   </script>
 </body>
 ```
+
+## 滚动页
+
+> 鼠标滚动一次即滚动整页
+
+```js
+$scrollPage(scrollEl,childCount)
+```
+
+> 参数`scrollEl`：传递滚动的元素
+>
+> 参数`childCount`：传递数字，页面子元素页数
+
+```html
+<div id="pagescrollEl">
+  <div class="pageItem" style="background-color: red;">1</div>
+  <div class="pageItem" style="background-color: blue;">2</div>
+  <div class="pageItem" style="background-color: green;">3</div>
+  
+   <!-- JS -->
+  <script>
+    $scrollPage(document.querySelector('#pagescrollEl'), 3)
+  </script>
+</div>
+```
+
