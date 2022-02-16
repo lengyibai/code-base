@@ -188,7 +188,7 @@ $throttle(fn, wait, true);
 ## 数字每三位加逗号
 
 ```js
-console.log($fmtNum(666)); //1,000
+console.log($fmtNum(1000)); //1,000
 ```
 
 ## 复制到剪切板
@@ -204,8 +204,8 @@ $copy(str, fn);
 > 参数`fn`：复制成功后将会调用，并可以接收参数，为复制的内容
 
 ```js
-$copy('666', function () {
-  console.log(text); //666
+$copy('冷弋白', function () {
+  console.log(text); //冷弋白
 });
 ```
 
