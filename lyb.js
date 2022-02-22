@@ -25,6 +25,23 @@ export function $type(o) {
     .toLowerCase();
 }
 
+//判断数据类型
+export function $isArray(type) {
+  return Object.prototype.toString.call(type) === "[object Array]";
+}
+export function $isBoolean(type) {
+  return Object.prototype.toString.call(type) === "[object Boolean]";
+}
+export function $isObject(type) {
+  return Object.prototype.toString.call(type) === "[object Object]";
+}
+export function $isString(type) {
+  return Object.prototype.toString.call(type) === "[object String]";
+}
+export function $isFunction(type) {
+  return Object.prototype.toString.call(type) === "[object Function]";
+}
+
 //开启全屏显示
 export function $isFull() {
   const docElm = document.documentElement;
@@ -125,7 +142,7 @@ export function $throttle(fn, delay, mtm = false) {
 //获取浏览器版本
 export function $chromeV() {
   let v = "";
-  navigator.userAgent.split(" ").forEach(item => {
+  navigator.userAgent.split(" ").forEach((item) => {
     /chrome/i.test(item) && (v = item);
   });
   return Number(v.split("/")[1].split(".")[0]);
@@ -1087,14 +1104,14 @@ export function $search(data, value, keys) {
   function fn(item, key) {
     let reg = new RegExp(item, "i");
     arr.push(
-      ...data.filter(item => {
+      ...data.filter((item) => {
         return reg.test($pinyin(item[key].toString())) || reg.test(item[key]);
       })
     );
   }
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (value.includes("-")) {
-      value.split("-").forEach(item => {
+      value.split("-").forEach((item) => {
         fn(item, key);
       });
     } else {
@@ -1110,12 +1127,12 @@ export function $searchMul(data, value, key) {
   function fn(item) {
     let reg = new RegExp(item, "i");
     arr.push(
-      ...data.filter(item => {
+      ...data.filter((item) => {
         return reg.test(item[key]);
       })
     );
   }
-  value.forEach(item => {
+  value.forEach((item) => {
     fn(item);
   });
   return arr;
@@ -1222,7 +1239,7 @@ export function $potEoPct(str, ret = 0) {
 //自定义拖拽元素
 export function $dragEl(el) {
   let newArr = [];
-  el.forEach(item => {
+  el.forEach((item) => {
     if (item.length != undefined) {
       item = Array.from(item);
       newArr.push(item);
@@ -1231,7 +1248,7 @@ export function $dragEl(el) {
     }
   });
   el = newArr.flat(Infinity);
-  el.forEach(item => {
+  el.forEach((item) => {
     fn(item);
   });
   function fn(el) {
@@ -1241,19 +1258,19 @@ export function $dragEl(el) {
       startY = 0,
       moveX = 0,
       moveY = 0;
-    el.addEventListener("touchstart", e => {
+    el.addEventListener("touchstart", (e) => {
       x = e.targetTouches[0].pageX;
       y = e.targetTouches[0].pageY;
       startX = el.offsetLeft;
       startY = el.offsetTop;
     });
-    el.addEventListener("touchmove", e => {
+    el.addEventListener("touchmove", (e) => {
       moveX = e.targetTouches[0].pageX - x;
       moveY = e.targetTouches[0].pageY - y;
       el.style.left = `${moveX + startX}px`;
       el.style.top = `${moveY + startY}px`;
     });
-    el.addEventListener("mousedown", e => {
+    el.addEventListener("mousedown", (e) => {
       x = e.pageX;
       y = e.pageY;
       startX = el.offsetLeft;

@@ -37,6 +37,20 @@ console.log(
 );
 ```
 
+## 判断数据类型
+
+> 返回`Boolean`值
+
+```js
+console.log(
+  $isArray([]), //true
+  $isBoolean(false), //true
+  $isObject({}), //true
+  $isString(""), //true
+  $isFunction(() => {}), //true
+);
+```
+
 ## 控制全屏显示
 
 > 点击指定按钮或指定条件下全屏显示
