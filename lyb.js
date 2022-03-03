@@ -18,11 +18,7 @@ export const $storage = {
 
 //返回数据类型
 export function $type(o) {
-  return Object.prototype.toString
-    .call(o)
-    .substr(8)
-    .replace(/]/g, "")
-    .toLowerCase();
+  return Object.prototype.toString.call(o).substr(8).replace(/]/g, "").toLowerCase();
 }
 
 //判断数据类型
@@ -87,8 +83,32 @@ export function $objDelRep(data, key) {
 
 /* 功能 */
 
-//防抖
-export function $debounce(fn, delay, mtm = false) {
+//节流（默认延迟执行）
+export function throttle(fn, delay, mtm = false) {
+  if (mtm) {
+    let baseTime = 0;
+    return function () {
+      const currentTime = Date.now();
+      if (baseTime + delay < currentTime) {
+        fn.apply(this, arguments);
+        baseTime = currentTime;
+      }
+    };
+  } else {
+    let timer;
+    return function () {
+      if (!timer) {
+        timer = setTimeout(() => {
+          timer = null;
+          fn();
+        }, delay);
+      }
+    };
+  }
+}
+
+// 防抖（默认延迟执行）
+export function debounce(fn, delay, mtm = false) {
   if (mtm) {
     let timer;
     return function () {
@@ -113,32 +133,6 @@ export function $debounce(fn, delay, mtm = false) {
   }
 }
 
-//节流（延迟执行）
-export function $throttle(fn, delay, mtm = false) {
-  if (mtm) {
-    let baseTime = 0;
-    return function () {
-      const currentTime = Date.now();
-      if (baseTime + delay < currentTime) {
-        fn.apply(this, arguments);
-        baseTime = currentTime;
-      }
-    };
-  } else {
-    let valid = true;
-    return () => {
-      if (!valid) {
-        return false;
-      }
-      valid = false;
-      setTimeout(() => {
-        fn();
-        valid = true;
-      }, delay);
-    };
-  }
-}
-
 //获取浏览器版本
 export function $chromeV() {
   let v = "";
@@ -151,8 +145,7 @@ export function $chromeV() {
 //数字每三位加逗号
 export function $fmtNum(num) {
   const str = num.toString();
-  const reg =
-    str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+  const reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
   return str.replace(reg, "$1,");
 }
 
@@ -180,10 +173,7 @@ export function $fmtTime(date, fmt = "YYYY-MM-DD hh:mm:ss") {
   for (let k in opt) {
     ret = new RegExp(`(${k})`).exec(fmt);
     if (ret) {
-      fmt = fmt.replace(
-        ret[1],
-        ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
-      );
+      fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0"));
     }
   }
   return fmt;
@@ -360,8 +350,7 @@ export function $pinyin(keyword) {
           kua: "\u5938\u57ae\u630e\u8de8\u80ef\u4f89",
           kuai: "\u5757\u7b77\u4fa9\u5feb\u84af\u90d0\u8489\u72ef\u810d",
           kuan: "\u5bbd\u6b3e\u9acb",
-          kuang:
-            "\u5321\u7b50\u72c2\u6846\u77ff\u7736\u65f7\u51b5\u8bd3\u8bf3\u909d\u5739\u593c\u54d0\u7ea9\u8d36",
+          kuang: "\u5321\u7b50\u72c2\u6846\u77ff\u7736\u65f7\u51b5\u8bd3\u8bf3\u909d\u5739\u593c\u54d0\u7ea9\u8d36",
           kui: "\u4e8f\u76d4\u5cbf\u7aa5\u8475\u594e\u9b41\u5080\u9988\u6127\u6e83\u9997\u532e\u5914\u9697\u63c6\u55b9\u559f\u609d\u6126\u9615\u9035\u668c\u777d\u8069\u8770\u7bd1\u81fe\u8dec",
           kun: "\u5764\u6606\u6346\u56f0\u6083\u9603\u7428\u951f\u918c\u9cb2\u9ae1",
           kuo: "\u62ec\u6269\u5ed3\u9614\u86de",
@@ -376,8 +365,7 @@ export function $pinyin(keyword) {
           leng: "\u51b7\u695e\u6123",
           li: "\u5398\u68a8\u7281\u9ece\u7bf1\u72f8\u79bb\u6f13\u7406\u674e\u91cc\u9ca4\u793c\u8389\u8354\u540f\u6817\u4e3d\u5389\u52b1\u783e\u5386\u5229\u5088\u4f8b\u4fd0\u75e2\u7acb\u7c92\u6ca5\u96b6\u529b\u7483\u54e9\u4fea\u4fda\u90e6\u575c\u82c8\u8385\u84e0\u85dc\u6369\u5456\u5533\u55b1\u7301\u6ea7\u6fa7\u9026\u5a0c\u5ae0\u9a8a\u7f21\u73de\u67a5\u680e\u8f79\u623e\u783a\u8a48\u7f79\u9502\u9e42\u75a0\u75ac\u86ce\u870a\u8821\u7b20\u7be5\u7c9d\u91b4\u8dde\u96f3\u9ca1\u9ce2\u9ee7",
           lian: "\u4fe9\u8054\u83b2\u8fde\u9570\u5ec9\u601c\u6d9f\u5e18\u655b\u8138\u94fe\u604b\u70bc\u7ec3\u631b\u8539\u5941\u6f4b\u6fc2\u5a08\u740f\u695d\u6b93\u81c1\u81a6\u88e2\u880a\u9ca2",
-          liang:
-            "\u7cae\u51c9\u6881\u7cb1\u826f\u4e24\u8f86\u91cf\u667e\u4eae\u8c05\u589a\u690b\u8e09\u9753\u9b49",
+          liang: "\u7cae\u51c9\u6881\u7cb1\u826f\u4e24\u8f86\u91cf\u667e\u4eae\u8c05\u589a\u690b\u8e09\u9753\u9b49",
           liao: "\u64a9\u804a\u50da\u7597\u71ce\u5be5\u8fbd\u6f66\u4e86\u6482\u9563\u5ed6\u6599\u84fc\u5c25\u5639\u7360\u5bee\u7f2d\u948c\u9e69\u8022",
           lie: "\u5217\u88c2\u70c8\u52a3\u730e\u51bd\u57d2\u6d0c\u8d94\u8e90\u9b23",
           lin: "\u7433\u6797\u78f7\u9716\u4e34\u90bb\u9cde\u6dcb\u51db\u8d41\u541d\u853a\u5d99\u5eea\u9074\u6aa9\u8f9a\u77b5\u7cbc\u8e8f\u9e9f",
@@ -489,13 +477,11 @@ export function $pinyin(keyword) {
           sha: "\u838e\u7802\u6740\u5239\u6c99\u7eb1\u50bb\u5565\u715e\u810e\u6b43\u75e7\u88df\u970e\u9ca8",
           shai: "\u7b5b\u6652\u917e",
           shan: "\u73ca\u82eb\u6749\u5c71\u5220\u717d\u886b\u95ea\u9655\u64c5\u8d61\u81b3\u5584\u6c55\u6247\u7f2e\u5261\u8baa\u912f\u57cf\u829f\u6f78\u59d7\u9a9f\u81bb\u9490\u759d\u87ee\u8222\u8dda\u9cdd",
-          shang:
-            "\u5892\u4f24\u5546\u8d4f\u664c\u4e0a\u5c1a\u88f3\u57a7\u7ef1\u6b87\u71b5\u89de",
+          shang: "\u5892\u4f24\u5546\u8d4f\u664c\u4e0a\u5c1a\u88f3\u57a7\u7ef1\u6b87\u71b5\u89de",
           shao: "\u68a2\u634e\u7a0d\u70e7\u828d\u52fa\u97f6\u5c11\u54e8\u90b5\u7ecd\u52ad\u82d5\u6f72\u86f8\u7b24\u7b72\u8244",
           she: "\u5962\u8d4a\u86c7\u820c\u820d\u8d66\u6444\u5c04\u6151\u6d89\u793e\u8bbe\u538d\u4f58\u731e\u7572\u9e9d",
           shen: "\u7837\u7533\u547b\u4f38\u8eab\u6df1\u5a20\u7ec5\u795e\u6c88\u5ba1\u5a76\u751a\u80be\u614e\u6e17\u8bdc\u8c02\u5432\u54c2\u6e16\u6939\u77e7\u8703",
-          sheng:
-            "\u58f0\u751f\u7525\u7272\u5347\u7ef3\u7701\u76db\u5269\u80dc\u5723\u4e1e\u6e11\u5ab5\u771a\u7b19",
+          sheng: "\u58f0\u751f\u7525\u7272\u5347\u7ef3\u7701\u76db\u5269\u80dc\u5723\u4e1e\u6e11\u5ab5\u771a\u7b19",
           shi: "\u5e08\u5931\u72ee\u65bd\u6e7f\u8bd7\u5c38\u8671\u5341\u77f3\u62fe\u65f6\u4ec0\u98df\u8680\u5b9e\u8bc6\u53f2\u77e2\u4f7f\u5c4e\u9a76\u59cb\u5f0f\u793a\u58eb\u4e16\u67ff\u4e8b\u62ed\u8a93\u901d\u52bf\u662f\u55dc\u566c\u9002\u4ed5\u4f8d\u91ca\u9970\u6c0f\u5e02\u6043\u5ba4\u89c6\u8bd5\u8c25\u57d8\u83b3\u84cd\u5f11\u5511\u9963\u8f7c\u8006\u8d33\u70bb\u793b\u94c8\u94ca\u87ab\u8210\u7b6e\u8c55\u9ca5\u9cba",
           shou: "\u6536\u624b\u9996\u5b88\u5bff\u6388\u552e\u53d7\u7626\u517d\u624c\u72e9\u7ef6\u824f",
           shu: "\u852c\u67a2\u68b3\u6b8a\u6292\u8f93\u53d4\u8212\u6dd1\u758f\u4e66\u8d4e\u5b70\u719f\u85af\u6691\u66d9\u7f72\u8700\u9ecd\u9f20\u5c5e\u672f\u8ff0\u6811\u675f\u620d\u7ad6\u5885\u5eb6\u6570\u6f31\u6055\u500f\u587e\u83fd\u5fc4\u6cad\u6d91\u6f8d\u59dd\u7ebe\u6bf9\u8167\u6bb3\u956f\u79eb\u9e6c",
@@ -1017,8 +1003,7 @@ export function $pinyin(keyword) {
       },
       // 提取首字母，返回大写形式
       getCamelChars(str) {
-        if (typeof str !== "string")
-          throw new Error(-1, "函数getFisrt需要字符串类型参数!");
+        if (typeof str !== "string") throw new Error(-1, "函数getFisrt需要字符串类型参数!");
         let chars = []; //保存中间结果的数组
         for (let i = 0, len = str.length; i < len; i++) {
           //获得unicode码
@@ -1051,11 +1036,8 @@ export function $pinyin(keyword) {
         //如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
         if (unicode > 40869 || unicode < 19968) return ch; //dealWithOthers(ch);
         //检查是否是多音字,是按多音字处理,不是就直接在strChineseFirstPY字符串中找对应的首字母
-        if (!this.options.checkPolyphone)
-          return this.char_dict.charAt(unicode - 19968);
-        return this.polyphone[unicode]
-          ? this.polyphone[unicode]
-          : this.char_dict.charAt(unicode - 19968);
+        if (!this.options.checkPolyphone) return this.char_dict.charAt(unicode - 19968);
+        return this.polyphone[unicode] ? this.polyphone[unicode] : this.char_dict.charAt(unicode - 19968);
       },
       _getResult(chars) {
         if (!this.options.checkPolyphone) return chars.join("");
@@ -1144,8 +1126,7 @@ export function $urlFileType(url, type) {
     image: ["jpeg", "jpg", "png", "webp", "bmp", "gif", "svg"],
     video: ["avi", "mov", "rmvb", "rm", "flv", "mp4", "3gp"],
   };
-  if (type instanceof Array)
-    return type.includes(url.replace(/.+\./, "").toLowerCase());
+  if (type instanceof Array) return type.includes(url.replace(/.+\./, "").toLowerCase());
   return obj[type].includes(url.replace(/.+\./, "").toLowerCase());
 }
 
@@ -1166,26 +1147,9 @@ export function $getFileSuf(str) {
 
 //根据时间段问候
 export function $timeGreet(greet = {}) {
-  const {
-    a = "午夜好",
-    b = "早上好",
-    c = "上午好",
-    d = "中午好",
-    e = "下午好",
-    f = "晚上好",
-  } = greet;
+  const { a = "午夜好", b = "早上好", c = "上午好", d = "中午好", e = "下午好", f = "晚上好" } = greet;
   const now = new Date().getHours();
-  return now < 4
-    ? a
-    : now < 10
-    ? b
-    : now < 12
-    ? c
-    : now < 14
-    ? d
-    : now < 18
-    ? e
-    : f;
+  return now < 4 ? a : now < 10 ? b : now < 12 ? c : now < 14 ? d : now < 18 ? e : f;
 }
 
 //排序支持数字&字母&时间&中文
@@ -1211,15 +1175,9 @@ export function $fmtByte(bytes) {
 
 //秒数格式化
 export function $fmtSec(seconds) {
-  let hour =
-    Math.floor(seconds / 3600) >= 10
-      ? Math.floor(seconds / 3600)
-      : `0${Math.floor(seconds / 3600)}`;
+  let hour = Math.floor(seconds / 3600) >= 10 ? Math.floor(seconds / 3600) : `0${Math.floor(seconds / 3600)}`;
   seconds -= 3600 * hour;
-  let min =
-    Math.floor(seconds / 60) >= 10
-      ? Math.floor(seconds / 60)
-      : `0${Math.floor(seconds / 60)}`;
+  let min = Math.floor(seconds / 60) >= 10 ? Math.floor(seconds / 60) : `0${Math.floor(seconds / 60)}`;
   seconds -= 60 * min;
   let sec = seconds >= 10 ? seconds : `0${seconds}`;
   return [hour, min, sec, `${hour}:${min}:${sec}`];
