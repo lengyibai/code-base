@@ -467,6 +467,81 @@ console.log($potEoPct(0.12345, 2)); //12.35
 console.log($potEoPct('12.34%')); //0.1234
 ```
 
+## 图片修改
+
+> 点击图片，选择图片，进行修改
+>
+> 内部使用了`axios`需要在函数外手动引入`axios`
+>
+> 需要在源码内设置接口地址
+
+```js
+$editFile(event)
+```
+
+> 参数`event`：事件对象
+
+```vue
+<template>
+   <input type="file" @change="fn" />
+</template>
+
+<script>
+export default {
+  methods: {
+    fn(e) {
+      $editFile(e).then(res => {
+        console.log(res);
+      });
+    }
+  }
+};
+</script>
+```
+
+## 图片压缩
+
+> 超过一定大小进行压缩
+>
+> 超过一定尺寸进行压缩
+
+```js
+$imageOptimizer(obj)
+```
+
+| 对象属性 | 说明                                                         | 类型     | 是否必填 | 默认值   |
+| -------- | ------------------------------------------------------------ | -------- | -------- | -------- |
+| el       | `input`表单                                                  | Element  | 是       | -        |
+| width    | 压缩的宽度，超过则压缩                                       | Number   | 否       | 自身宽度 |
+| ratio    | 压缩率，0<`ratio`<=1                                         | Number   | 否       | 1        |
+| maxsize  | 文件大小超过多大进行压缩，单位`kb`                           | Number   | 否       | 1024     |
+| success  | 压缩成功回调<br />回调参数：<br />参数1：可直接传给后端的表单对象<br />参数2：`file`类型<br />参数3：base64，可放置在`a`标签上下载以及`img`标签上预览 | Function | 是       | -        |
+
+
+
+```html
+<body>
+  <input type="file" id="img">
+
+  <!-- JS -->
+  <script>
+    const img = document.querySelector('#img');
+    img.addEventListener('change', function () {
+      $imageOptimizer({
+        el: img, //上传图片的input元素
+        width: 1000, //压缩尺寸
+        ratio: 1, //压缩率
+        maxsize: 1024, //超过多大进行压缩
+        /* 成功回调 */
+        success: (data, file, url) => {}
+      });
+    })
+  </script>
+</body>
+```
+
+
+
 # 样式类函数
 
 ## 自定义拖拽元素
