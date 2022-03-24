@@ -1192,7 +1192,7 @@ export function $potEoPct(str, ret = 0) {
   }
 }
 
-//图片修改
+//图片上传修改
 export function $editFile(file) {
   const data = new FormData();
   data.append("file", file.target.files[0]);
