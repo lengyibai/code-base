@@ -556,7 +556,27 @@ $imageOptimizer(obj)
 </body>
 ```
 
+## requestAnimationFrame计时器
 
+> 比`setInterval`拥有更好的性能，比如切换软件窗口，会暂停执行，返回浏览器窗口继续执行，不会占用性能，而`setInterval`在切换、最小化浏览器窗口后依然会执行
+>
+> 唯一不足的是频率比`setInterval`快百来毫秒，可以忽略不计
+
+```js
+$frameInterval(fn,fre)
+```
+
+> 参数与`setInterval`的前两个参数的功能一样
+
+```js
+const box = document.querySelector(".box");
+let deg = 0;
+$frameInterval(() => {
+  deg++;
+  console.log(deg);
+  box.style.transform = `rotate(${deg}deg)`;
+});
+```
 
 # 样式类函数
 

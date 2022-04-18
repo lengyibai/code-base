@@ -1334,6 +1334,20 @@ export function $imageOptimizer(obj) {
   }
 }
 
+// requestAnimationFrame计时器
+export function $frameInterval(fn, fre = 0) {
+  let time = 0;
+  f();
+  function f() {
+    time += 10;
+    if (time > fre) {
+      fn();
+      time = 0;
+    }
+    requestAnimationFrame(f);
+  }
+}
+
 /* 样式 */
 
 //自定义拖拽元素
@@ -1386,59 +1400,5 @@ export function $dragEl(el) {
         window.removeEventListener('mousemove', fn);
       });
     });
-  }
-}
-
-// 滚动页
-export function $scrollPage(scrollEl, childCount) {
-  //获取元素的高度,页面可视高度
-  let viewHeight = document.documentElement.clientHeight;
-  //获取滚动的页数
-  let pageNum = childCount;
-  //初始化当前位置
-  let currentPosition = 0;
-  //设置页面高度
-  scrollEl.style.height = viewHeight + 'px';
-
-  // 向上向下的操作
-  function goDown() {
-    if (currentPosition > -viewHeight * (pageNum - 1)) {
-      currentPosition = currentPosition - viewHeight;
-      scrollEl.style.top = currentPosition + 'px';
-    }
-  }
-
-  function goUp() {
-    if (currentPosition < 0) {
-      currentPosition = currentPosition + viewHeight;
-      scrollEl.style.top = currentPosition + 'px';
-    }
-  }
-
-  //防止用户多次滚动的延时,使用到了闭包
-  function throttle(fn, delay) {
-    let baseTime = 0;
-    return function () {
-      const currentTime = Date.now();
-      if (baseTime + delay < currentTime) {
-        fn.apply(this, arguments);
-        baseTime = currentTime;
-      }
-    };
-  }
-  // 绑定事件  fireFox 的滑动事件不同,做出区别
-  let handlerWheel = throttle(scrollMove, 1000);
-  if (navigator.userAgent.toLowerCase().indexOf('fireFox') === -1) {
-    scrollEl.addEventListener('mousewheel', handlerWheel);
-  } else {
-    scrollEl.addEventListener('DOMMouseScroll', hanlerWheel);
-  }
-
-  function scrollMove(e) {
-    if (e.deltaY > 0) {
-      goDown();
-    } else {
-      goUp();
-    }
   }
 }
