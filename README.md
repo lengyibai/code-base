@@ -558,7 +558,7 @@ $imageOptimizer(obj)
 
 > 比`setInterval`拥有更好的性能，比如切换软件窗口，会暂停执行，返回浏览器窗口继续执行，不会占用性能，而`setInterval`在切换、最小化浏览器窗口后依然会执行
 >
-> 唯一不足的是频率比`setInterval`快百来毫秒，可以忽略不计
+> 唯一不足的是无法清除，一般用于不需要清楚地动画、频率比`setInterval`快百来毫秒，但可以忽略不计
 
 ```js
 $frameInterval(fn,fre)
@@ -691,29 +691,3 @@ $dragEl([dom,dom,...])
   </script>
 </body>
 ```
-
-## 滚动页
-
-> 鼠标滚动一次即滚动整页
-
-```js
-$scrollPage(scrollEl,childCount)
-```
-
-> 参数`scrollEl`：传递滚动的元素
->
-> 参数`childCount`：传递数字，页面子元素页数
-
-```html
-<div id="pagescrollEl">
-  <div class="pageItem" style="background-color: red;">1</div>
-  <div class="pageItem" style="background-color: blue;">2</div>
-  <div class="pageItem" style="background-color: green;">3</div>
-  
-   <!-- JS -->
-  <script>
-    $scrollPage(document.querySelector('#pagescrollEl'), 3)
-  </script>
-</div>
-```
-
