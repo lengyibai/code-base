@@ -533,8 +533,6 @@ $imageOptimizer(obj)
 | maxsize  | 文件大小超过多大进行压缩，单位`kb`                           | Number   | 否       | 1024     |
 | success  | 压缩成功回调<br />回调参数：<br />参数1：可直接传给后端的表单对象<br />参数2：`file`类型<br />参数3：base64，可放置在`a`标签上下载以及`img`标签上预览 | Function | 是       | -        |
 
-
-
 ```html
 <body>
   <input type="file" id="img">
@@ -577,6 +575,85 @@ $frameInterval(() => {
   box.style.transform = `rotate(${deg}deg)`;
 });
 ```
+
+## 对象转Excel
+
+> 需要安装依赖：`npm i xlsx@0.17.4`，且只能安装`0.17.4`版本
+>
+> 还需引入`import XLSX from "xlsx"`
+>
+> 用于导出表格
+
+```js
+$objToExc(obj)
+```
+
+| 对象属性 | 说明                                                         | 类型   | 是否必填 | 默认值     |
+| -------- | ------------------------------------------------------------ | ------ | -------- | ---------- |
+| name     | 导出的文件名                                                 | String | 否       | 未命名表格 |
+| data     | 需要导出为Excel表格的数据                                    | Array  | 是       | -          |
+| format   | 主要功能是更改对象的属性，来作为Excel的表头，不填则导出所有列，填一列导出一列，详细用法见下 | Object | 否       | {}         |
+
+```html
+<template>
+    <button @click="$objToExc">点击导出</button>
+</template>
+<script>
+import { $objToExc } from "./lyb.js";
+export default {
+  data() {
+    return {
+      data = [
+        { a: 0, name: '张三', age: 20, b: 0 },
+        { a: 1, name: '李四', age: 21, b: 1 },
+        { a: 2, name: '王五', age: 22, b: 2 },
+      ],
+    };
+  },
+  methods: {
+    $objToExc() {
+      /*
+      	将对象的name和age替换为姓名和年龄，在表格内就会展示姓名和年龄的表头，且只有姓名和年龄两列
+      	不填则导出所有列
+      */
+      $objToExc({data:this.data, format:{ name: '姓名', age: '年龄' }}); 
+    },
+  },
+};
+</script>
+```
+
+## Excel转对象
+
+> 相当于解析文件，很少遇到这种需求，但将`Excel`解析和过滤再导出也挺不错
+
+```js
+$excToObj(e)
+```
+
+> `e`：见代码
+
+```html
+<template>
+    <input
+      type="file"
+      accept=".xls, .xlsx"
+      @change="$excToObj"
+    />
+</template>
+<script>
+import { $excToObj } from "./lyb.js";
+export default {
+  methods: {
+    $excToObj(e) {
+      console.log($excToObj(e)); //打印的是解析Excel后的数据
+    },
+  },
+};
+</script>
+```
+
+
 
 # 样式类函数
 

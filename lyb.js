@@ -193,12 +193,24 @@ export function $getCountTime(time = '2022-04-01 10:45:00') {
     times = future - now > 0 ? Math.floor((future - now) / 1000) : Math.floor((now - future) / 1000);
 
   const time_arr = [
-    { y: times / 60 / 60 / 24 / 30 / 12 },
-    { mon: (times / 60 / 60 / 24 / 30) % 12 },
-    { d: (times / 60 / 60 / 24) % 30 },
-    { h: (times / 60 / 60) % 24 },
-    { min: (times / 60) % 60 },
-    { s: times % 60 },
+    {
+      y: times / 60 / 60 / 24 / 30 / 12,
+    },
+    {
+      mon: (times / 60 / 60 / 24 / 30) % 12,
+    },
+    {
+      d: (times / 60 / 60 / 24) % 30,
+    },
+    {
+      h: (times / 60 / 60) % 24,
+    },
+    {
+      min: (times / 60) % 60,
+    },
+    {
+      s: times % 60,
+    },
   ];
   let timeObj = {};
   time_arr.forEach(item => {
@@ -1115,6 +1127,7 @@ export function $pinyin(keyword) {
 //正则搜索
 export function $search(data, value, keys) {
   let arr = [];
+
   function fn(item, key) {
     let reg = new RegExp(item, 'i');
     arr.push(
@@ -1138,6 +1151,7 @@ export function $search(data, value, keys) {
 //正则搜索(传入数组搜索)
 export function $searchMul(data, value, key) {
   let arr = [];
+
   function fn(item) {
     let reg = new RegExp(item, 'i');
     arr.push(
@@ -1312,8 +1326,11 @@ export function $imageOptimizer(obj) {
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-    return new Blob([u8arr], { type: mime });
+    return new Blob([u8arr], {
+      type: mime,
+    });
   }
+
   function dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -1327,6 +1344,7 @@ export function $imageOptimizer(obj) {
       type: mime,
     });
   }
+
   function formData(file) {
     const data = new FormData();
     data.append('file', file);
@@ -1338,6 +1356,7 @@ export function $imageOptimizer(obj) {
 export function $frameInterval(fn, fre = 0) {
   let time = 0;
   f();
+
   function f() {
     time += 10;
     if (time > fre) {
@@ -1346,6 +1365,58 @@ export function $frameInterval(fn, fre = 0) {
     }
     requestAnimationFrame(f);
   }
+}
+
+/* 对象转Excel文件 */
+export function $objToExc(obj = {}) {
+  let { name = '未命名表格', data = [], format = {} } = obj;
+  function $fmtObj(data, format) {
+    return data.map(i =>
+      Object.assign(
+        ...Object.keys(format).map(j => ({
+          [format[j]]: i[j],
+        }))
+      )
+    );
+  }
+  const ws = XLSX.utils.json_to_sheet(JSON.stringify(format) === '{}' ? data : $fmtObj(data, format));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'People');
+  XLSX.writeFile(wb, name + '.xlsx');
+}
+
+/* Excel文件转对象 */
+export function $excToObj(e) {
+  return new Promise(resolve => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    let resultArray = [];
+    reader.onload = event => {
+      let data = event.target.result;
+      const workbook = XLSX.read(data, {
+        type: 'binary',
+      });
+      workbook.SheetNames.forEach(function (sheetName) {
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+          header: 1,
+        });
+        let mainData = data.slice(1);
+        if (mainData.length > 0) {
+          for (let row = 0; row < mainData.length; row++) {
+            let rowData = {};
+            for (let col = 0; col < data[0].length; col++) {
+              rowData[data[0][col]] = mainData[row][col] || '';
+            }
+            resultArray.push(rowData);
+          }
+          resolve(resultArray);
+        } else {
+          alert('至少需要一行有效数据');
+        }
+      });
+    };
+    reader.readAsBinaryString(file);
+  });
 }
 
 /* 样式 */
@@ -1365,6 +1436,7 @@ export function $dragEl(el) {
   el.forEach(item => {
     fn(item);
   });
+
   function fn(el) {
     let x = 0,
       y = 0,
@@ -1390,6 +1462,7 @@ export function $dragEl(el) {
       startX = el.offsetLeft;
       startY = el.offsetTop;
       window.addEventListener('mousemove', fn);
+
       function fn(e) {
         moveX = e.pageX - x;
         moveY = e.pageY - y;
