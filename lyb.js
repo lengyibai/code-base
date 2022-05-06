@@ -1419,6 +1419,20 @@ export function $excToObj(e) {
   });
 }
 
+/* 获取地址栏参数 */
+function $getPathParams() {
+  var url = decodeURI(location.search);
+  var params = {};
+  if (url.indexOf('?') != -1) {
+    var str = url.substr(1);
+    var strs = str.split('&');
+    for (var i = 0; i < strs.length; i++) {
+      params[strs[i].split('=')[0]] = strs[i].split('=')[1];
+    }
+  }
+  return params;
+}
+
 /* 样式 */
 
 //自定义拖拽元素

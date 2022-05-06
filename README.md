@@ -653,7 +653,13 @@ export default {
 </script>
 ```
 
+## 获取地址栏参数
 
+> 直接调用即可，返回一个参数对象
+
+```js
+$getPathParams()
+```
 
 # 样式类函数
 
