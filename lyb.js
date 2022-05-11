@@ -70,6 +70,35 @@ export function $random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//字符串去重(全局)
+export function $strDelRep(v) {
+  let obj = {},
+    str = '',
+    len = v.length;
+  for (let i = 0; i < len; i++) {
+    if (!obj[v[i]]) {
+      str += v[i];
+      obj[v[i]] = true;
+    }
+  }
+  return str;
+}
+//字符串去重(连续)
+export function $strDelReps(v) {
+  return str.replace(/(\w)\1+/g, '$1');
+}
+
+//数组深度去重
+export function $arrDelRep(arr) {
+  let obj = {};
+  return arr.filter(ele => {
+    if (!obj[ele]) {
+      obj[ele] = true;
+      return true;
+    }
+  });
+}
+
 //对象去重
 export function $objDelRep(data, key) {
   let arr = data;
@@ -1281,8 +1310,8 @@ export function $imageOptimizer(obj) {
           });
           p2.then(
             e => {
-              var canvas = document.querySelector('canvas');
-              var context = canvas.getContext('2d');
+              let canvas = document.querySelector('canvas');
+              let context = canvas.getContext('2d');
               // 如果图片尺寸大于规定尺寸，则压缩尺寸
               let scale = width / e.width;
               if (scale < 1) {
@@ -1318,7 +1347,7 @@ export function $imageOptimizer(obj) {
   }
 
   function dataURLtoBlob(dataurl) {
-    var arr = dataurl.split(','),
+    let arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
       n = bstr.length,
@@ -1332,7 +1361,7 @@ export function $imageOptimizer(obj) {
   }
 
   function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(','),
+    let arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
       n = bstr.length,
@@ -1421,12 +1450,12 @@ export function $excToObj(e) {
 
 /* 获取地址栏参数 */
 function $getPathParams() {
-  var url = decodeURI(location.search);
-  var params = {};
+  let url = decodeURI(location.search);
+  let params = {};
   if (url.indexOf('?') != -1) {
-    var str = url.substr(1);
-    var strs = str.split('&');
-    for (var i = 0; i < strs.length; i++) {
+    let str = url.substr(1);
+    let strs = str.split('&');
+    for (let i = 0; i < strs.length; i++) {
       params[strs[i].split('=')[0]] = strs[i].split('=')[1];
     }
   }
