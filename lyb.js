@@ -1,21 +1,4 @@
 /* 原生 */
-
-//本地存储
-export const $storage = {
-  set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-  get(key) {
-    return JSON.parse(localStorage.getItem(key));
-  },
-  del(key) {
-    localStorage.removeItem(key);
-  },
-  clear() {
-    localStorage.clear();
-  },
-};
-
 //返回数据类型
 export function $type(o) {
   return Object.prototype.toString.call(o).substr(8).replace(/]/g, '').toLowerCase();

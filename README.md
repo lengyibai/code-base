@@ -11,17 +11,6 @@
 
 # 原生封装
 
-## 本地存储
-
-> 永久存储
-
-```js
-$storage.set(key, value); //设置值
-$storage.get(key); //获取值
-$storage.del(key); //删除指定值
-$storage.clear(); //清空所有数据
-```
-
 ## 返回数据类型
 
 > 返回的数据类型为全小写的字符串
@@ -677,7 +666,7 @@ export default {
       	将对象的name和age替换为姓名和年龄，在表格内就会展示姓名和年龄的表头，且只有姓名和年龄两列
       	不填则导出所有列
       */
-      $objToExc({data:this.data, format:{ name: '姓名', age: '年龄' }}); 
+      $objToExc({data:this.data, format:{ name: '姓名', age: '年龄' }});
     },
   },
 };
