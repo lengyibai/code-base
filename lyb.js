@@ -43,7 +43,7 @@ export function $isFull() {
   const docElm = document.documentElement;
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen();
-  } else if (docElm.mozRequestFullScreen) {
+  } else if (docElm.moRequestFullScreen) {
     docElm.mozRequestFullScreen();
   } else if (docElm.webkitRequestFullScreen) {
     docElm.webkitRequestFullScreen();
@@ -1449,7 +1449,7 @@ export function $excToObj(e) {
 }
 
 /* 获取地址栏参数 */
-function $getPathParams() {
+export function $getPathParams() {
   let url = decodeURI(location.search);
   let params = {};
   if (url.indexOf('?') != -1) {
