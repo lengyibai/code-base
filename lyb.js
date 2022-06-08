@@ -49,8 +49,8 @@ export function $noFull() {
 }
 
 //随机数
-export function $random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+export function $random(min, max, num = 0) {
+  return parseFloat((Math.random() * (max - min) + min).toFixed(num));
 }
 
 //字符串去重(全局)
@@ -96,7 +96,7 @@ export function $objDelRep(data, key) {
 /* 功能 */
 
 //节流（默认延迟执行）
-export function throttle(fn, delay, mtm = false) {
+export function $throttle(fn, delay, mtm = false) {
   if (mtm) {
     let baseTime = 0;
     return function () {
@@ -120,7 +120,7 @@ export function throttle(fn, delay, mtm = false) {
 }
 
 // 防抖（默认延迟执行）
-export function debounce(fn, delay, mtm = false) {
+export function $debounce(fn, delay, mtm = false) {
   if (mtm) {
     let timer;
     return function () {

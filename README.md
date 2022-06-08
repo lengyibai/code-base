@@ -56,9 +56,11 @@ $noFull(); //关闭全屏
 > 参数`min`：传递一个数字，最小值
 >
 > 参数`max`：传递一个数字，最大值
+>
+> 参数`retain`：保留几位小数，默认整数
 
 ```js
-$random(min, max);
+$random(min, max, retain);
 ```
 
 ## 字符串去重
