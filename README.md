@@ -577,13 +577,13 @@ export default {
 $imageOptimizer(obj)
 ```
 
-| 对象属性 | 说明                                                         | 类型     | 是否必填 | 默认值   |
-| -------- | ------------------------------------------------------------ | -------- | -------- | -------- |
-| el       | `input`表单                                                  | Element  | 是       | -        |
-| width    | 压缩的宽度，超过则压缩                                       | Number   | 否       | 自身宽度 |
-| ratio    | 压缩率，0<`ratio`<=1                                         | Number   | 否       | 1        |
-| maxsize  | 文件大小超过多大进行压缩，单位`kb`                           | Number   | 否       | 1024     |
-| success  | 压缩成功回调<br />回调参数：<br />参数1：可直接传给后端的表单对象<br />参数2：`file`类型<br />参数3：base64，可放置在`a`标签上下载以及`img`标签上预览 | Function | 是       | -        |
+| 对象属性     | 说明                                                         | 类型              | 是否必填 | 默认值   |
+| ------------ | ------------------------------------------------------------ | ----------------- | -------- | -------- |
+| el \|\| file | `input`表单或`file`类型的文件                                | Element \|\| File | 二选一   | -        |
+| width        | 压缩的宽度，超过则压缩                                       | Number            | 否       | 自身宽度 |
+| ratio        | 压缩率，0<`ratio`<=1                                         | Number            | 否       | 1        |
+| maxsize      | 文件大小超过多大进行压缩，单位`kb`                           | Number            | 否       | 1024     |
+| success      | 压缩成功回调<br />回调参数：<br />参数1：可直接传给后端的表单对象<br />参数2：`file`类型<br />参数3：base64，可放置在`a`标签上下载以及`img`标签上预览 | Function          | 是       | -        |
 
 ```html
 <body>
@@ -595,6 +595,7 @@ $imageOptimizer(obj)
     img.addEventListener('change', function () {
       $imageOptimizer({
         el: img, //上传图片的input元素
+        //file:f, //file类型的文件
         width: 1000, //压缩尺寸
         ratio: 1, //压缩率
         maxsize: 1024, //超过多大进行压缩
