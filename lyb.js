@@ -1288,9 +1288,9 @@ export function $potEoPct(str, ret = 0) {
 
 //图片上传修改
 import axios from "axios";
-export function $editFile(file) {
+export function $editFile(event) {
   const data = new FormData();
-  data.append("file", file.target.files[0]);
+  data.append("file", event.target.files[0]);
   return axios.post("http://xxx.xx.xx.xxx:xxxx/upload", data);
 }
 
