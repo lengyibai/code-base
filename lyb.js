@@ -1252,7 +1252,7 @@ export function $typeSort(data, key, rev = true) {
 
 // 字节格式化
 export function $fmtByte(bytes) {
-  if (bytes == 0) return [0, "B", "0 B"];
+  if (!bytes) return [0, "B", "0 B"];
   let k = 1024,
     size = 0,
     sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
