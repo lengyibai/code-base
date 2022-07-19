@@ -187,11 +187,11 @@ export default {
     };
   },
   created() {
-    $throttle = lyb(function () {}.bind(this), 250);
+    lyb = $throttle(function () {}.bind(this), 250);
   },
   mounted() {
     setInterval(() => {
-      $throttle();
+      lyb();
     }, 100);
   },
 };
