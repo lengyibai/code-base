@@ -1179,19 +1179,13 @@ export function $search(data, value, keys) {
   function fn(item, key) {
     let reg = new RegExp(item, "i");
     arr.push(
-      ...data.filter((item) => {
-        return reg.test($pinyin(item[key].toString())) || reg.test(item[key]);
+      ...data.filter(item => {
+        return reg.test($pinyin(item[key]||item[key].toString())) || reg.test(item[key]);
       }),
     );
   }
-  keys.forEach((key) => {
-    if (value.includes("-")) {
-      value.split("-").forEach((item) => {
-        fn(item, key);
-      });
-    } else {
-      fn(value, key);
-    }
+  keys.forEach(key => {
+    fn(value || "", key);
   });
   return arr;
 }
